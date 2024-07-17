@@ -1,7 +1,6 @@
 "use client"
 import Header from "@/app/components/Header";
 import { useUserAuth } from "./_utils/auth-context";
-import Link from "next/link";
 import { useState } from "react";
 import HomeScreen from "./_views/HomeScreen";
 import Sidebar from "./components/sidebar";
@@ -34,7 +33,7 @@ export default function Home() {
       <Header/>
       <div>
         {!user ? (
-          <LoginScreen className="ml-auto mr-auto mt-8"/>
+          <LoginScreen className="ml-auto mr-auto mt-8 h-auto"/>
         ) : (
           <div>
             <Sidebar setCurrentView={setCurrentView} />

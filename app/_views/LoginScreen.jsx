@@ -12,8 +12,10 @@ const LoginScreen = () => {
     
 
     return (
-        <div>
-            <button onClick={handleSignIn}>Login with GitHub</button>
+        <div className="flex flex-col items-center">
+            <h1 className="font-semibold">Welcome to the MeetMoment Scheduling application!</h1>
+            <button onClick={handleSignIn}
+            className="w-80">Login with GitHub</button>
         </div>
     );
 }

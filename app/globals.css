@@ -42,7 +42,7 @@ body {
 @layer base {
   main {
     @apply
-    min-h-full
+    min-h-screen
     w-4/5 
     m-2
     rounded-md
@@ -57,7 +57,7 @@ body {
     rounded-lg
     px-5
     py-1
-    m-1
+    my-4
     text-purple-50
     border-2
     border-purple-50
@@ -65,6 +65,9 @@ body {
     shadow-purple-200
   }
   
+  
 
 
 }
+
+

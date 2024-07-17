@@ -9,13 +9,14 @@ const Sidebar = ({ setCurrentView }) => {
     };
 
     return (
-        <div className="flex flex-col w-48 h-full bg-neutral-800 text-purple-50 p-4 fixed">
+        <div className="flex flex-col w-48 h-auto bg-neutral-800 text-purple-50 p-4 fixed">
             <p>Welcome, {user.displayName}</p>
             <button onClick={() => setCurrentView('home')}>Home</button>
             <button onClick={() => setCurrentView('newMeeting')}>New Meeting</button>
             <button onClick={() => setCurrentView('requests')}>Requests</button>
             <button onClick={() => setCurrentView('profile')}>Profile</button>
-            <button onClick={handleSignOut}>Logout</button>
+            <button onClick={handleSignOut}
+            className='mt-60'>Logout</button>
         </div>
     );
 };
