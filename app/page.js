@@ -1,11 +1,50 @@
-import Image from "next/image";
+"use client"
+import Header from "@/app/components/Header";
+import { useUserAuth } from "./_utils/auth-context";
+import Link from "next/link";
+import { useState } from "react";
+import HomeScreen from "./_views/HomeScreen";
+import Sidebar from "./components/sidebar";
+import LoginScreen from "./_views/LoginScreen";
+import NewMeetingScreen from "./_views/NewMeetingScreen";
+import RequestsScreen from "./_views/RequestsScreen";
+import ProfileScreen from "./_views/PrifileScreen";
 
 export default function Home() {
+  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  const [currentView, setCurrentView] = useState('home');
+
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case 'home':
+        return <HomeScreen/>
+        case 'newMeeting':
+          return <NewMeetingScreen />;
+        case 'requests':
+          return <RequestsScreen />;
+        case 'profile':
+          return <ProfileScreen />;
+        default:
+          return <HomeScreen />;
+    }
+  };
+
   return (
     <main>
+      <Header/>
       <div>
-        Welcome to Chloe&apos;s final project webapp for CPRG-306<br/><br/>
-        This will be the web interface of the MeetMoment app! A multi platform, intuitive, and efficient meeting scheduling application!
+        {!user ? (
+          <LoginScreen className="ml-auto mr-auto mt-8"/>
+        ) : (
+          <div>
+            <Sidebar setCurrentView={setCurrentView} />
+            <div className="ml-48 p-4 flex-1">
+              {renderCurrentView()}
+              
+            </div>
+          </div>
+        )}
+        
       </div>
     </main>
   );

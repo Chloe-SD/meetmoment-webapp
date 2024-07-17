@@ -2,32 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* SITE COLOR SCHEME
+
+black - 34, 34, 34 (neutral-800)
+white - 249, 247, 255 (purple-50)
+pri - 61, 144, 227 (blue-500)
+sec - 23, 78, 135 (sky-800)
+ */
+
+ :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
+  --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 34, 34, 34;
+    --background-start-rgb: 249, 247, 255;
+    --background-end-rgb: 249, 247, 255;
+    --secondary-rgb: 23, 78, 135;
+    --primary-rgb: 61, 144, 227;
   }
 }
 
 body {
+  display: flex;
+  justify-content: center;
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@layer base {
+  main {
+    @apply
+    min-h-full
+    w-4/5 
+    m-2
+    rounded-md
+    drop-shadow-lg
+    bg-blue-500
+    p-2
+  }
+  button {
+    @apply
+    bg-gradient-to-br from-sky-800 to-green-400
+    hover:bg-gradient-to-bl
+    rounded-lg
+    px-5
+    py-1
+    m-1
+    text-purple-50
+    border-2
+    border-purple-50
+    shadow-sm
+    shadow-purple-200
+  }
+  
+
+
 }
