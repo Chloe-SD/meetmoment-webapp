@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TimeBlockSelector from '../components/TimeBlockSelector';
 import { useUserAuth } from '../_utils/auth-context';
+import { saveMeetingSchedule } from '../_utils/databaseMgr';
 
 const NewMeetingScreen = () => {
   const { user } = useUserAuth();
@@ -68,35 +69,47 @@ const NewMeetingScreen = () => {
     setSchedule(updatedSchedule);
   };
 
+  const handleSaveMeeting = async () => {
+    if (!schedule) return;
+
+    try {
+      const docRef = await saveMeetingSchedule(schedule);
+      alert('Meeting saved successfully! Document ID: ' + docRef.id);
+    } catch (error) {
+      console.error('Error saving meeting: ', error);
+      alert('Failed to save meeting.');
+    }
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">New Meeting</h1>
-      <div className="mb-4">
-        <label className="block mb-2">Select Start Date</label>
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          className="p-2 border rounded-md"
-        />
+      <h1 className="text-2xl font-bold mb-4">Create A New Meeting</h1>
+      <div className='flex flex-wrap items-center'>
+        <div className="mb-4 mx-5">
+          <label className="block mb-2">Select Start Date</label>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            className="p-2 border rounded-md"
+          />
+        </div>
+        <div className="mb-4 mx-5">
+          <label className="block mb-2">Select End Date</label>
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            className="p-2 border rounded-md"
+          />
+        </div>
+        <button onClick={handleCreateNewSchedule} className="m-5">
+          Create Schedule
+        </button>
       </div>
-      <div className="mb-4">
-        <label className="block mb-2">Select End Date</label>
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          className="p-2 border rounded-md"
-        />
-      </div>
-      <button
-        onClick={handleCreateNewSchedule}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md"
-      >
-        Create Schedule
-      </button>
       {schedule && (
         <div>
-          <h2 className="text-xl font-bold my-4">Schedule Created</h2>
+          <h2 className="text-xl font-bold my-4">Schedule Created by: {schedule.creatorEmail}</h2>
           <TimeBlockSelector days={schedule.days} onBlockToggle={handleBlockToggle} />
+          <button onClick={handleSaveMeeting}>Save Meeting</button>
         </div>
       )}
     </div>
