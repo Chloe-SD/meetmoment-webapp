@@ -4,12 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { useUserAuth } from '../_utils/auth-context';
 import { db } from "../_utils/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import MeetingDetailsScreen from './MeetingDetailsScreen';
 
 
 const HomeScreen = ({ setCurrentView, setSelectedMeetingId }) => {
   const { user } = useUserAuth();
   const [meetings, setMeetings] = useState([]);
-  const [selectedMeeting, setSelectedMeeting] = useState();
+  const [selectedMeeting, setSelectedMeeting] = useState(null);
 
   useEffect(() => {
     if (!user?.email) return;
@@ -30,25 +31,42 @@ const HomeScreen = ({ setCurrentView, setSelectedMeetingId }) => {
 
   const handleMeetingClick = (id) => {
     setSelectedMeeting(id);
-    setCurrentView('meetingDetails');
+  };
+
+  const handleDeselectMeeting = () => {
+    setSelectedMeeting(null);
   };
 
   return (
     <div className="container">
-      <h2 className="text-2xl font-bold mb-4">Your Meetings</h2>
-      {meetings.length === 0 ? (
-        <p>No meetings found.</p>
-      ) : (
-        <ul>
-          {meetings.map((meeting) => (
-            <li key={meeting.id} onClick={() => handleMeetingClick(meeting.id)} 
-            className="cursor-pointer border border-purple-50 p-2">
-              <p>ID: {meeting.id}</p>
-              <p>Creator: {meeting.creatorEmail}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div>
+        {selectedMeeting ? (
+          <div>
+            <button onClick={handleDeselectMeeting}>back</button>
+            <MeetingDetailsScreen meetingId={selectedMeeting} />
+          </div>
+        ) : (
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Your Meetings</h2>
+            {meetings.length === 0 ? (
+              <p>No meetings found.</p>
+            ) : (
+              <ul>
+                {meetings.map((meeting) => (
+                  <li key={meeting.id} onClick={() => handleMeetingClick(meeting.id)} 
+                  className="cursor-pointer border border-purple-50 p-2">
+                    <p>ID: {meeting.id}</p>
+                    <p>Creator: {meeting.creatorEmail}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+      </div>
+
+
+      
     </div>
   );
 };

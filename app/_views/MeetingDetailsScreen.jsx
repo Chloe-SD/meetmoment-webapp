@@ -54,4 +54,3 @@ const MeetingDetailsScreen = ({ meetingId }) => {
 };
 
 export default MeetingDetailsScreen;
-
