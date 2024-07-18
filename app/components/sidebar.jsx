@@ -2,7 +2,7 @@ import React from 'react';
 import { useUserAuth } from '../_utils/auth-context';
 
 const Sidebar = ({ setCurrentView }) => {
-    const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+    const { user, firebaseSignOut } = useUserAuth();
 
     function handleSignOut() {
         firebaseSignOut();
@@ -11,6 +11,7 @@ const Sidebar = ({ setCurrentView }) => {
     return (
         <div className="flex flex-col w-48 h-auto bg-neutral-800 text-purple-50 p-4 fixed">
             <p>Welcome, {user.displayName}</p>
+            <p>{user.email}</p>
             <button onClick={() => setCurrentView('home')}>Home</button>
             <button onClick={() => setCurrentView('newMeeting')}>New Meeting</button>
             <button onClick={() => setCurrentView('requests')}>Requests</button>

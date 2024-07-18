@@ -3,7 +3,7 @@ import { useUserAuth } from "../_utils/auth-context";
 
 
 const LoginScreen = () => {
-    const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+    const { user, gitHubSignIn } = useUserAuth();
 
     function handleSignIn() {
         gitHubSignIn();

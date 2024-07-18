@@ -1,12 +1,16 @@
+"use client"
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TimeBlockSelector from '../components/TimeBlockSelector';
+import { useUserAuth } from '../_utils/auth-context';
 
 const NewMeetingScreen = () => {
+  const { user } = useUserAuth();
   const [schedule, setSchedule] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const userEmail = user.email
 
   const generateTimeBlocks = (date) => {
     let blocks = [];
@@ -16,7 +20,6 @@ const NewMeetingScreen = () => {
       const startTime = current.toTimeString().split(' ')[0].substring(0, 5);
       blocks.push({
         start: startTime,
-        end: '', // End time is not displayed, so we leave it empty
         available: false,
       });
       current = new Date(current.getTime() + 60 * 60000); // 60-minute intervals
@@ -25,31 +28,35 @@ const NewMeetingScreen = () => {
   };
 
   const generateDays = (startDate, endDate) => {
-    let days = [];
-    let current = new Date(startDate);
-    const end = new Date(endDate);
-    while (current <= end) {
+    // Called by: CreateSchedule() => returns array of days for a NEW meeting
+    let days = []; // create an array to hold the days for the meeting
+    let current = new Date(startDate); // set a day counter variable to cycle through
+    let end = new Date(endDate);
+    while (current <= end) { // iterate through until endDate is reached
+      current.setDate(current.getDate()+1); // increment the date (It starts as day before)
       const dateStr = current.toLocaleDateString('en-CA'); // Use local date string
-      days.push({
+      days.push({ // Add the day to the meeting days array
         date: dateStr,
-        blocks: generateTimeBlocks(dateStr),
+        blocks: generateTimeBlocks(dateStr), // generate the time blocks within each day
       });
-      current.setDate(current.getDate() + 1);
     }
     return days;
   };
 
   const createSchedule = (startDate, endDate) => {
+    //Called by: handleCreateNewSchedule() => Calls generateDays() => returns a NEW meeting schedule OBJ
+    //let email = {user.email};
     const newSchedule = {
       id: Date.now().toString(),
-      creatorEmail: 'creator@example.com',
+      creatorEmail: userEmail,
       emails: ['user1@example.com', 'user2@example.com'],
       days: generateDays(startDate, endDate),
     };
     setSchedule(newSchedule);
   };
 
-  const handleDateRangeSelected = () => {
+  const handleCreateNewSchedule = () => {
+    // called by the "Create Schedule" button on the UI => calls CreateSchedule()
     createSchedule(startDate, endDate);
   };
 
@@ -81,7 +88,7 @@ const NewMeetingScreen = () => {
         />
       </div>
       <button
-        onClick={handleDateRangeSelected}
+        onClick={handleCreateNewSchedule}
         className="bg-blue-500 text-white px-4 py-2 rounded-md"
       >
         Create Schedule
