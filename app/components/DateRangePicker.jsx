@@ -5,10 +5,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 const DateRangePicker = ({ startDate, endDate, setStartDate, setEndDate }) => {
   return (
-    <div className="flex space-x-10">
-      <div className="border-2 border-neutral-800 rounded-md p-2 bg-sky-800">
+    <div className="flex justify-center space-x-10 mt-5">
+      <div className="border-2 border-purple-50 rounded-md py-2 px-5 bg-blue-500">
         <p className='text-purple-50'>Select Start Date:</p>
         <DatePicker
+          className='w-full rounded-md p-1'
           selected={startDate}
           onChange={(date) => setStartDate(date)}
           selectsStart
@@ -17,9 +18,10 @@ const DateRangePicker = ({ startDate, endDate, setStartDate, setEndDate }) => {
         />
         <p className='text-purple-50'>{startDate.toDateString()}</p>
       </div>
-      <div className="border-2 border-neutral-800 rounded-md p-2 bg-sky-800">
+      <div className="border-2 border-purple-50 rounded-md py-2 px-5 bg-blue-500">
         <p className='text-purple-50'>Select End Date:</p>
         <DatePicker
+          className='w-full rounded-md p-1'
           selected={endDate}
           onChange={(date) => setEndDate(date)}
           selectsEnd

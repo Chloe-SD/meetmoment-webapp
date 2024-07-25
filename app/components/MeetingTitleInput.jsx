@@ -1,12 +1,11 @@
 // MeetingTitleInput.jsx
 import React from 'react';
-//import './MeetingTitleInput.css'; // We'll create this CSS file
 
 const MeetingTitleInput = ({ title, setTitle }) => (
-  <div className="meeting-title-container">
-    <h1 className="meeting-title">New Meeting</h1>
+  <div className='flex flex-col justify-center w-px-300 items-center'>
+    <h1 className='text-lg text-purple-50 mt-4 mb-2'>New Meeting:</h1>
     <input
-      className="meeting-title-input"
+      className='w-3/4 p-2 rounded-md border-2 border-neutral-800'
       type="text"
       placeholder="Meeting Title"
       value={title}

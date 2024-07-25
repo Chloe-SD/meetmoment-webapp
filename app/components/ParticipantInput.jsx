@@ -13,15 +13,15 @@ const ParticipantInput = ({ onAddParticipant }) => {
   };
 
   return (
-    <div className="participant-input-container">
+    <div className='flex justify-center items-center space-x-4 px-5'>
       <input
-        className="participant-input"
+        className='p-2 rounded-md border-2 border-neutral-800 w-2/3'
         type="email"
         placeholder="Add Participant Email"
         value={newEmail}
         onChange={(e) => setNewEmail(e.target.value)}
       />
-      <button className="add-button" onClick={handleAddParticipant}>
+      <button onClick={handleAddParticipant}>
         ADD
       </button>
     </div>
