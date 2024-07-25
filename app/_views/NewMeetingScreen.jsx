@@ -1,116 +1,141 @@
 "use client"
 import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import TimeBlockSelector from '../components/TimeBlockSelector';
 import { useUserAuth } from '../_utils/auth-context';
-import { saveMeetingSchedule } from '../_utils/databaseMgr';
+import { SaveMeetingSchedule } from '../_utils/databaseMgr';
+import MeetingTitleInput from '../components/MeetingTitleInput';
+import ParticipantInput from '../components/ParticipantInput';
+import ParticipantList from '../components/ParticipantList';
+import DateRangePicker from '../components/DateRangePicker';
+import MeetingSchedule from '../components/MeetingSchedule';
 
 const NewMeetingScreen = () => {
   const { user } = useUserAuth();
-  const [schedule, setSchedule] = useState(null);
+  const [title, setTitle] = useState('');
+  const [participants, setParticipants] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const userEmail = user.email
+  const [meeting, setMeeting] = useState(null);
+
+  const addParticipant = (email) => {
+    if (email === user?.email) {
+      return;
+    }
+    setParticipants([...participants, { email, status: 'pending' }]);
+  };
+
+  const removeParticipant = (email) => {
+    setParticipants(participants.filter(p => p.email !== email));
+  };
+
+  const createMeeting = () => {
+    if (!user) {
+      return;
+    }
+    const currentUserEmail = user.email;
+    const newMeeting = {
+      id: Date.now().toString(),
+      creatorEmail: currentUserEmail,
+      participants,
+      days: generateDays(startDate, endDate),
+      title,
+      status: 'pending',
+      participantAvailability: {
+        [currentUserEmail]: generateDays(startDate, endDate),
+      },
+    };
+    setMeeting(newMeeting);
+  };
+
+  const saveMeetingToDB = async () => {
+    if (!meeting || !user) return;
+    const currentUserEmail = user.email;
+    const meetingToSave = {
+      id: meeting.id,
+      creatorEmail: currentUserEmail,
+      participants: [...participants, {email: currentUserEmail, status: 'confirmed'}],
+      days: meeting.days,
+      title: title,
+      status: 'pending',
+      participantAvailability: {
+        [currentUserEmail]: generateDays(startDate, endDate),
+      },
+    };
+
+    try {
+      await SaveMeetingSchedule(meetingToSave);
+      console.log('Meeting saved successfully!');
+    } catch (error) {
+      console.error('Error saving meeting:', error);
+    }
+  };
 
   const generateTimeBlocks = (date) => {
     let blocks = [];
-    let current = new Date(`${date}T07:00:00`); // Start at 7 AM
-    const endDateTime = new Date(`${date}T20:00:00`); // End at 8 PM
-    while (current <= endDateTime) {
-      const startTime = current.toTimeString().split(' ')[0].substring(0, 5);
+    let current = new Date(`${date}T07:00:00`);  // Start at 7 AM
+    const endTime = new Date(`${date}T20:00:00`);  // End at 8 PM
+  
+    while (current < endTime) {
+      const start = current.toTimeString().slice(0, 5);
+      current.setHours(current.getHours() + 1);
+      const end = current.toTimeString().slice(0, 5);
+  
       blocks.push({
-        start: startTime,
+        start,
+        end,
         available: false,
+        selectable: true, // All blocks are selectable for the creator
       });
-      current = new Date(current.getTime() + 60 * 60000); // 60-minute intervals
     }
+  
     return blocks;
   };
+  
+  const generateDays = (start, end) => {
+    console.log('Start date received:', start.toISOString());
+    console.log('End date received:', end.toISOString());
 
-  const generateDays = (startDate, endDate) => {
-    // Called by: CreateSchedule() => returns array of days for a NEW meeting
-    let days = []; // create an array to hold the days for the meeting
-    let current = new Date(startDate); // set a day counter variable to cycle through
-    let end = new Date(endDate);
-    while (current <= end) { // iterate through until endDate is reached
-      current.setDate(current.getDate()+1); // increment the date (It starts as day before)
-      const dateStr = current.toLocaleDateString('en-CA'); // Use local date string
-      days.push({ // Add the day to the meeting days array
+    let days = [];
+  
+    // Create new Date objects set to midnight in local time
+    let current = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    let endDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+  
+    console.log('Adjusted start date:', current.toISOString());
+    console.log('Adjusted end date:', endDate.toISOString());
+
+    while (current <= endDate) {
+      const dateStr = current.toISOString().split('T')[0];
+      console.log('Adding date:', dateStr);
+      days.push({
         date: dateStr,
-        blocks: generateTimeBlocks(dateStr), // generate the time blocks within each day
+        blocks: generateTimeBlocks(dateStr),
       });
+      current.setDate(current.getDate() + 1);
     }
+
+    console.log('Generated days:', days.map(day => day.date));
+  
     return days;
   };
 
-  const createSchedule = (startDate, endDate) => {
-    //Called by: handleCreateNewSchedule() => Calls generateDays() => returns a NEW meeting schedule OBJ
-    //let email = {user.email};
-    const newSchedule = {
-      id: Date.now().toString(),
-      creatorEmail: userEmail,
-      emails: ['user1@example.com', 'user2@example.com'],
-      days: generateDays(startDate, endDate),
-    };
-    setSchedule(newSchedule);
-  };
-
-  const handleCreateNewSchedule = () => {
-    // called by the "Create Schedule" button on the UI => calls CreateSchedule()
-    createSchedule(startDate, endDate);
-  };
-
   const handleBlockToggle = (dayIndex, blockIndex) => {
-    if (!schedule) return;
-    const updatedSchedule = { ...schedule };
-    const block = updatedSchedule.days[dayIndex].blocks[blockIndex];
+    if (!meeting) return;
+    const updatedMeeting = { ...meeting };
+    const block = updatedMeeting.days[dayIndex].blocks[blockIndex];
     block.available = !block.available;
-    setSchedule(updatedSchedule);
-  };
-
-  const handleSaveMeeting = async () => {
-    if (!schedule) return;
-
-    try {
-      const docRef = await saveMeetingSchedule(schedule);
-      alert('Meeting saved successfully! Document ID: ' + docRef.id);
-    } catch (error) {
-      console.error('Error saving meeting: ', error);
-      alert('Failed to save meeting.');
-    }
+    setMeeting(updatedMeeting);
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Create A New Meeting</h1>
-      <div className='flex flex-wrap items-center'>
-        <div className="mb-4 mx-5">
-          <label className="block mb-2">Select Start Date</label>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            className="p-2 border rounded-md"
-          />
-        </div>
-        <div className="mb-4 mx-5">
-          <label className="block mb-2">Select End Date</label>
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            className="p-2 border rounded-md"
-          />
-        </div>
-        <button onClick={handleCreateNewSchedule} className="m-5">
-          Create Schedule
-        </button>
-      </div>
-      {schedule && (
-        <div>
-          <h2 className="text-xl font-bold my-4">Schedule Created by: {schedule.creatorEmail}</h2>
-          <TimeBlockSelector days={schedule.days} onBlockToggle={handleBlockToggle} />
-          <button onClick={handleSaveMeeting}>Save Meeting</button>
-        </div>
+    <div className="container">
+      <MeetingTitleInput title={title} setTitle={setTitle} />
+      <ParticipantInput onAddParticipant={addParticipant} />
+      <ParticipantList participants={participants} onRemoveParticipant={removeParticipant} />
+      <DateRangePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
+      <button className="button" onClick={createMeeting}>Create Meeting</button>
+      {meeting && (
+        <MeetingSchedule meeting={meeting} onBlockToggle={handleBlockToggle} onSaveMeeting={saveMeetingToDB} />
       )}
     </div>
   );
