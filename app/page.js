@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     <main>
-      <Header/>
+      {/* <Header/> */}
       <div>
         {!user ? (
           <LoginScreen className="ml-auto mr-auto mt-8 h-auto"/>
