@@ -2,9 +2,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useUserAuth } from '../_utils/auth-context';
-import { db } from "../_utils/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import MeetingDetailsScreen from './MeetingDetailsScreen';
+import { FetchMeetings } from '../_utils/databaseMgr';
 
 
 const HomeScreen = ({ setCurrentView, setSelectedMeetingId }) => {
@@ -13,24 +12,22 @@ const HomeScreen = ({ setCurrentView, setSelectedMeetingId }) => {
   const [selectedMeeting, setSelectedMeeting] = useState(null);
 
   useEffect(() => {
-    if (!user?.email) return;
+    if (user) {
+      fetchUserMeetings();
+    }
+  }, [user]);
 
-    const fetchMeetings = async () => {
-      const meetingsRef = collection(db, 'meetings');
-      const q = query(meetingsRef, where("creatorEmail", "==", user.email));
-      const querySnapshot = await getDocs(q);
-      const fetchedMeetings = [];
-      querySnapshot.forEach((doc) => {
-        fetchedMeetings.push({ id: doc.id, ...doc.data() });
-      });
+  const fetchUserMeetings = async () => {
+    try {
+      const fetchedMeetings = await FetchMeetings(user.email);
       setMeetings(fetchedMeetings);
-    };
+    } catch (error) {
+      alert("Failed to load meetings. Please try again.");
+    }
+  };
 
-    fetchMeetings();
-  }, [user?.email]);
-
-  const handleMeetingClick = (id) => {
-    setSelectedMeeting(id);
+  const handleMeetingClick = (meeting) => {
+    setSelectedMeeting(meeting);
   };
 
   const handleDeselectMeeting = () => {
@@ -38,29 +35,37 @@ const HomeScreen = ({ setCurrentView, setSelectedMeetingId }) => {
   };
 
   return (
-    <div className="container">
+    <div>
       <div>
         {selectedMeeting ? (
           <div>
-            <button onClick={handleDeselectMeeting}>back</button>
-            <MeetingDetailsScreen meetingId={selectedMeeting} />
+            <MeetingDetailsScreen meeting={selectedMeeting} onClose={handleDeselectMeeting} />
           </div>
         ) : (
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Your Meetings</h2>
+          <div className="border-2 border-neutral-800 bg-blue-500 rounded-md 
+          flex flex-col h-svh">
+            <h2 className="text-2xl font-bold mb-4
+            my-4 self-center">{user.displayName}'s Meetings</h2>
             {meetings.length === 0 ? (
               <p>No meetings found.</p>
             ) : (
-              <ul>
-                {meetings.map((meeting) => (
-                  <li key={meeting.id} onClick={() => handleMeetingClick(meeting.id)} 
-                  className="cursor-pointer border border-purple-50 p-2">
-                    <p>ID: {meeting.id}</p>
-                    <p>Creator: {meeting.creatorEmail}</p>
-                  </li>
+              <div className='flex flex-col overflow-y-auto w-full mb-10'>
+                {meetings.map((item) => (
+                  <div 
+                    key={item.id} 
+                    className="bg-sky-800 rounded-md p-4 mb-4 cursor-pointer border-2
+                    border-purple-50 w-2/3 flex flex-col self-center"
+                    onClick={() => handleMeetingClick(item)}
+                  >
+                    <div>
+                      <h3 className="text-lg font-bold text-purple-50">{item.title}</h3>
+                      <p className="text-sm text-purple-50">created by: {item.creatorEmail}</p>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
+            
           </div>
         )}
       </div>

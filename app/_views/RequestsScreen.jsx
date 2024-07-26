@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { useUserAuth } from '../_utils/auth-context';
 import { FetchMeetings } from '../_utils/databaseMgr';
+import MeetingDetailsScreen from './MeetingDetailsScreen';
 
 const RequestsScreen = () => {
   const { user } = useUserAuth();
   const [search, setSearch] = useState('');
   const [code, setCode] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedMeeting, setSelectedMeeting] = useState('');
   const [meetings, setMeetings] = useState([]);
 
   useEffect(() => {
@@ -26,10 +27,18 @@ const RequestsScreen = () => {
   };
 
   const handleMeetingClick = (meeting) => {
-    setModalVisible(true);
+    setSelectedMeeting(meeting);
   };
 
-  return (
+  const handleDeselectMeeting = () => {
+    setSelectedMeeting(null);
+  };
+
+  return selectedMeeting? (
+    <div>
+      <MeetingDetailsScreen meeting={selectedMeeting} onClose={handleDeselectMeeting} />
+    </div>
+  ) : (
     <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 
     bg-blue-500 max-h-svh">
       <h2 className="text-2xl font-bold mb-4 self-center">{user?.displayName}'s Requests</h2>
