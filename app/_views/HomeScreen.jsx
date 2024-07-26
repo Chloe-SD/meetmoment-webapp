@@ -45,7 +45,7 @@ const HomeScreen = ({ setCurrentView, setSelectedMeetingId }) => {
           <div className="border-2 border-neutral-800 bg-blue-500 rounded-md 
           flex flex-col h-svh">
             <h2 className="text-2xl font-bold mb-4
-            my-4 self-center">{user.displayName}'s Meetings</h2>
+            my-4 self-center">{user.displayName}&apos;s Meetings</h2>
             {meetings.length === 0 ? (
               <p>No meetings found.</p>
             ) : (
