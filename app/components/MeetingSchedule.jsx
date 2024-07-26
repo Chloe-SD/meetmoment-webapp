@@ -9,20 +9,21 @@ const MeetingSchedule = ({ meeting, onBlockToggle, onSaveMeeting }) => {
   const isCreator = user?.email === meeting.creatorEmail;
 
   return (
-    <div className="meeting-schedule">
-      <h2 className="meeting-schedule-title">Meeting Created</h2>
-      <TimeBlockSelector 
-        days={meeting.days} 
-        onBlockToggle={onBlockToggle}
-        isCreator={isCreator}
-        creatorDays={meeting.days}
-      />
+    <div className='flex flex-col'>
+      <div className='flex flex-col justify-center items-center  overflow-x-auto
+      border-2 border-neutral-800 rounded-md'>
+        <TimeBlockSelector 
+          days={meeting.days} 
+          onBlockToggle={onBlockToggle}
+          isCreator={isCreator}
+          creatorDays={meeting.days}
+        />
+      </div>
       <button 
-        className="save-meeting-button" 
-        onClick={onSaveMeeting}
-      >
-        {isCreator ? "Save Meeting" : "Submit Availability"}
-      </button>
+          className='self-center w-1/2'
+          onClick={onSaveMeeting}>
+          {isCreator ? "Save Meeting" : "Submit Availability"}
+        </button>
     </div>
   );
 };

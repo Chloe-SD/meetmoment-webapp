@@ -128,13 +128,14 @@ const NewMeetingScreen = () => {
   };
 
   return (
-    <div className='h-screen px-10 justify-center items center
-    border-2 border-neutral-800 rounded-md bg-sky-800'>
+    <div className='flex flex-col px-10 justify-center items center h-svh overflow-x-auto
+    border-2 border-neutral-800 bg-blue-500 rounded-md'>
       <MeetingTitleInput title={title} setTitle={setTitle}/>
       <ParticipantList participants={participants} onRemoveParticipant={removeParticipant} />
       <ParticipantInput onAddParticipant={addParticipant} />
       <DateRangePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
-      <button onClick={createMeeting}>Create Meeting</button>
+      <button onClick={createMeeting}
+        className='w-1/2 self-center'>{!meeting? 'Create Meeting' : 'Update Days'}</button>
       {meeting && (
         <MeetingSchedule meeting={meeting} onBlockToggle={handleBlockToggle} onSaveMeeting={saveMeetingToDB} />
       )}

@@ -42,12 +42,14 @@ body {
 @layer base {
   main {
     @apply
+    flex
+    flex-col
     min-h-screen
     w-4/5 
     m-2
     rounded-md
     drop-shadow-lg
-    bg-blue-500
+    bg-purple-50
     p-2
   }
   button {
