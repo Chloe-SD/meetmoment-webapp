@@ -44,7 +44,7 @@ body {
     @apply
     flex
     flex-col
-    min-h-screen
+    h-screen
     w-4/5 
     m-2
     rounded-md

@@ -128,7 +128,7 @@ const NewMeetingScreen = () => {
   };
 
   return (
-    <div className='flex flex-col px-10 justify-center items center h-svh overflow-x-auto
+    <div className='flex-1 flex-col px-10 justify-center overflow-y-auto
     border-2 border-neutral-800 bg-blue-500 rounded-md'>
       <MeetingTitleInput title={title} setTitle={setTitle}/>
       <ParticipantList participants={participants} onRemoveParticipant={removeParticipant} />
