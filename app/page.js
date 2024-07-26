@@ -10,7 +10,7 @@ import RequestsScreen from "./_views/RequestsScreen";
 import ProfileScreen from "./_views/PrifileScreen";
 
 export default function Home() {
-  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  const { user } = useUserAuth();
   const [currentView, setCurrentView] = useState('home');
 
   const renderCurrentView = () => {
