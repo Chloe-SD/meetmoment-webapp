@@ -1,5 +1,5 @@
 "use client"
-import Header from "@/app/components/Header";
+import Header from "./components/Header";
 import { useUserAuth } from "./_utils/auth-context";
 import { useState } from "react";
 import HomeScreen from "./_views/HomeScreen";
@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     <main>
-      {/* <Header/> */}
+      <Header/>
       <div>
         {!user ? (
           <LoginScreen className="ml-auto mr-auto mt-8 h-auto"/>
