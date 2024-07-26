@@ -1,7 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
 
-const Header = ({ username }) => {
+const Header = () => {
   return (
     <div className="bg-gradient-to-bl from-sky-800 to-sky-300
         flex items-center space-x-10 justify-center 
