@@ -15,7 +15,7 @@ const DayColumn = ({ date, blocks, onBlockToggle }) => {
           key={index}
           className={`p-2 w-20 border rounded-lg my-1 cursor-pointer 
             ${block.available ? 'bg-green-500 text-white' : 'bg-white'}
-            ${!block.selectable ? 'bg-gray-300 cursor-not-allowed' : ''}`}
+            ${!block.selectable ? 'bg-gray-400 cursor-not-allowed' : ''}`}
           onClick={() => block.selectable && onBlockToggle && onBlockToggle(index)}
         >
           <div className="text-center">{block.start}</div>
