@@ -1,3 +1,4 @@
+// app/components/DayColumn.jsx
 import React from 'react';
 
 const DayColumn = ({ date, blocks, onBlockToggle }) => {
@@ -14,7 +15,7 @@ const DayColumn = ({ date, blocks, onBlockToggle }) => {
           key={index}
           className={`p-2 w-20 border rounded-lg my-1 cursor-pointer 
             ${block.available ? 'bg-green-500 text-white' : 'bg-white'}
-            ${!block.selectable ? 'opacity-50 cursor-not-allowed' : ''}`}
+            ${!block.selectable ? 'bg-gray-300 cursor-not-allowed' : ''}`}
           onClick={() => block.selectable && onBlockToggle && onBlockToggle(index)}
         >
           <div className="text-center">{block.start}</div>
@@ -25,3 +26,4 @@ const DayColumn = ({ date, blocks, onBlockToggle }) => {
 };
 
 export default DayColumn;
+

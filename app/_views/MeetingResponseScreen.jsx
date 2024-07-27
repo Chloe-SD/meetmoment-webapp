@@ -3,96 +3,103 @@
 import React, { useEffect, useState } from 'react';
 import { useUserAuth } from '../_utils/auth-context';
 import { UpdateMeeting } from '../_utils/databaseMgr';
-import TimeBlockSelector from '../components/TimeBlockSelector';
 import MeetingSchedule from '../components/MeetingSchedule';
 
 const MeetingResponseScreen = ({ meeting, onClose }) => {
     const { user } = useUserAuth();
-    const [localDays, setLocalDays] = useState([]);
+    const [localMeeting, setLocalMeeting] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (user) {
+        if (user && meeting) {
             const isCreator = meeting.creatorEmail === user.email;
-            const userDays = isCreator? meeting.days : (meeting.participantAvailability?.[user.email] || meeting.days)
-            const initializedDays = userDays.map(day => ({
+            const userAvailability = meeting.participantAvailability?.[user.email] || [];
+            
+            const initializedDays = meeting.days.map(day => ({
                 ...day,
                 blocks: day.blocks.map(block => ({
                     ...block,
-                    selectable: meeting.days.find(d => d.date === day.date)?.blocks.find(b => b.start === block.start)?.available || false,
-                    available: isCreator ? false : block.available // For creator, start with all blocks unselected
-                    }))
-                }));
-                setLocalDays(initializedDays);
-            }
+                    selectable: block.available, // Only blocks the creator selected are selectable
+                    available: isCreator ? block.available : userAvailability.find(d => d.date === day.date)?.blocks.find(b => b.start === block.start)?.available || false
+                }))
+            }));
+
+            setLocalMeeting({
+                ...meeting,
+                days: initializedDays
+            });
             setIsLoading(false);
-        }, [user, meeting]
-    );
+        }
+    }, [user, meeting]);
 
     const handleBlockToggle = (dayIndex, blockIndex) => {
-        setLocalDays(prevDays => {
-            const newDays = [...prevDays];
-            const block = newDays[dayIndex].blocks[blockIndex];
-            if (block.selectable) {
-                block.available = !block.available;
-            }
-            return newDays;
+        setLocalMeeting(prevMeeting => {
+            const newDays = prevMeeting.days.map((day, dIndex) => {
+                if (dIndex !== dayIndex) return day;
+                return {
+                    ...day,
+                    blocks: day.blocks.map((block, bIndex) => {
+                        if (bIndex !== blockIndex) return block;
+                        return {
+                            ...block,
+                            available: block.selectable ? !block.available : block.available
+                        };
+                    })
+                };
+            });
+            return { ...prevMeeting, days: newDays };
         });
     };
 
     const handleSubmit = async () => {
         if (!user) {
-          alert('Error: You must be logged in to submit availability.');
-          return;
+            alert('Error: You must be logged in to submit availability.');
+            return;
         }
-    
+
         try {
-          const updatedMeeting = {
-            ...meeting,
-            participantAvailability: {
-              ...meeting.participantAvailability,
-              [user.email]: localDays,
-            },
-            participants: meeting.participants.map(p =>
-              p.email === user.email ? { ...p, status: 'confirmed' } : p
-            ),
-        };
-        await UpdateMeeting(updatedMeeting);
-        alert('Success: Your availability has been submitted.');
-        onClose();
+            const updatedMeeting = {
+                ...localMeeting,
+                participantAvailability: {
+                    ...localMeeting.participantAvailability,
+                    [user.email]: localMeeting.days,
+                },
+                participants: localMeeting.participants.map(p =>
+                    p.email === user.email ? { ...p, status: 'confirmed' } : p
+                ),
+            };
+            await UpdateMeeting(updatedMeeting);
+            alert('Success: Your availability has been submitted.');
+            onClose();
         } catch (error) {
             console.error('Error updating meeting:', error);
             alert('Error: Failed to update meeting. Please try again.');
         }
     };
 
-
-
     if (isLoading) {
         return (
-        <div className="border-2 border-neutral-800 bg-blue-500 rounded-md 
-                                    flex flex-col h-svh">
-            <p>Loading...</p>
-        </div>
+            <div className="border-2 border-neutral-800 bg-blue-500 rounded-md flex flex-col h-svh">
+                <p>Loading...</p>
+            </div>
         );
     }
 
     return (
-        <div className="border-2 border-neutral-800 bg-blue-500 rounded-md 
-        flex flex-col h-svh">
-        <button onClick={onClose}
-            className='self-end mx-5'>Back to My Requests</button>
-        <h2 className="text-2xl font-bold mb-4 self-center">{meeting.title} - Meeting Request</h2>
-        <div className='w-2/3 flex flex-col self-center overflow-y-auto'>
-            <p>Meeting Created by: {meeting.creatorEmail}</p>
-            <p>Meeting Code: {meeting.id}</p>
-            <MeetingSchedule 
-                meeting={meeting}
-            />
-        </div>
-        
+        <div className="border-2 border-neutral-800 bg-blue-500 rounded-md flex flex-col h-svh">
+            <button onClick={onClose} className='self-end mx-5'>Back to My Requests</button>
+            <h2 className="text-2xl font-bold mb-4 self-center">{localMeeting.title} - Meeting Request</h2>
+            <div className='w-2/3 flex flex-col self-center overflow-y-auto'>
+                <p>Meeting Created by: {localMeeting.creatorEmail}</p>
+                <p>Meeting Code: {localMeeting.id}</p>
+                <MeetingSchedule 
+                    meeting={localMeeting}
+                    onBlockToggle={handleBlockToggle}
+                    onSaveMeeting={handleSubmit}
+                />
+            </div>
         </div>
     );
-    };
+};
 
 export default MeetingResponseScreen;
