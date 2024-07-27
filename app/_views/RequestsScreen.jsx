@@ -1,7 +1,7 @@
 // src/screens/Requests.jsx
 import React, { useState, useEffect } from 'react';
 import { useUserAuth } from '../_utils/auth-context';
-import { FetchMeetings } from '../_utils/databaseMgr'
+import { FetchRequests } from '../_utils/databaseMgr'
 import MeetingResponseScreen from './MeetingResponseScreen';
 
 const RequestsScreen = () => {
@@ -19,7 +19,7 @@ const RequestsScreen = () => {
 
   const fetchUserMeetings = async () => {
     try {
-      const fetchedMeetings = await FetchMeetings(user.email);
+      const fetchedMeetings = await FetchRequests(user.email);
       setMeetings(fetchedMeetings);
     } catch (error) {
       alert("Failed to load meetings. Please try again.");

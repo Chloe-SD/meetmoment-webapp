@@ -8,7 +8,8 @@ import  { collection,
           doc, 
           setDoc, 
           getDoc } from "firebase/firestore";
-//import { useUserAuth } from "./auth-context"; // guess I don't need this after all?
+import { useUserAuth } from "./auth-context"; // guess I don't need this after all?
+
 
 export const SaveMeetingSchedule = async (schedule) => {
     try {
@@ -20,19 +21,60 @@ export const SaveMeetingSchedule = async (schedule) => {
     }
   };
 
-  export async function FetchMeetings() {
+  // export async function FetchMeetings() {
+  //   try {
+  //     const meetingsSnapshot = await getDocs(collection(db, 'meetings'));
+  //     return meetingsSnapshot.docs.map(doc => ({
+  //       id: doc.id,
+  //       title: doc.data().title || 'Untitled Meeting',
+  //       creatorEmail: doc.data().creatorEmail || 'Unknown',
+  //       participants: doc.data().participants || [],
+  //       days: doc.data().days || [],
+  //       status: doc.data().status || 'pending'
+  //     }));
+  //   } catch (error) {
+  //     console.error("Error fetching meetings:", error);
+  //     throw error;
+  //   }
+  // }
+  export async function FetchRequests(userEmail) {
     try {
       const meetingsSnapshot = await getDocs(collection(db, 'meetings'));
-      return meetingsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        title: doc.data().title || 'Untitled Meeting',
-        creatorEmail: doc.data().creatorEmail || 'Unknown',
-        participants: doc.data().participants || [],
-        days: doc.data().days || [],
-        status: doc.data().status || 'pending'
-      }));
+      const requests = meetingsSnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        .filter(meeting => 
+          meeting.participants.some(participant => 
+            participant.email === userEmail && participant.status === 'pending'
+          )
+        );
+      
+      return requests;
     } catch (error) {
-      console.error("Error fetching meetings:", error);
+      console.error("Error fetching requests:", error);
+      throw error;
+    }
+  }
+  
+  export async function FetchConfirmed(userEmail) {
+    try {
+      const meetingsSnapshot = await getDocs(collection(db, 'meetings'));
+      const confirmed = meetingsSnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        .filter(meeting => 
+          meeting.participants.some(participant => 
+            participant.email === userEmail && participant.status === 'confirmed'
+          )
+        );
+      
+      return confirmed;
+    } catch (error) {
+      console.error("Error fetching confirmed meetings:", error);
       throw error;
     }
   }

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useUserAuth } from '../_utils/auth-context';
 import MeetingDetailsScreen from './MeetingDetailsScreen';
-import { FetchMeetings } from '../_utils/databaseMgr';
+import { FetchConfirmed } from '../_utils/databaseMgr';
 
 
 const HomeScreen = ({ setCurrentView, setSelectedMeetingId }) => {
@@ -19,7 +19,7 @@ const HomeScreen = ({ setCurrentView, setSelectedMeetingId }) => {
 
   const fetchUserMeetings = async () => {
     try {
-      const fetchedMeetings = await FetchMeetings(user.email);
+      const fetchedMeetings = await FetchConfirmed(user.email);
       setMeetings(fetchedMeetings);
     } catch (error) {
       alert("Failed to load meetings. Please try again.");
