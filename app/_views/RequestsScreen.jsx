@@ -1,8 +1,8 @@
 // src/screens/Requests.jsx
 import React, { useState, useEffect } from 'react';
 import { useUserAuth } from '../_utils/auth-context';
-import { FetchMeetings } from '../_utils/databaseMgr';
-import MeetingDetailsScreen from './MeetingDetailsScreen';
+import { FetchMeetings } from '../_utils/databaseMgr'
+import MeetingResponseScreen from './MeetingResponseScreen';
 
 const RequestsScreen = () => {
   const { user } = useUserAuth();
@@ -36,7 +36,7 @@ const RequestsScreen = () => {
 
   return selectedMeeting? (
     <div>
-      <MeetingDetailsScreen meeting={selectedMeeting} onClose={handleDeselectMeeting} />
+      <MeetingResponseScreen meeting={selectedMeeting} onClose={handleDeselectMeeting} />
     </div>
   ) : (
     <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 

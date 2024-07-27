@@ -12,10 +12,10 @@ const DayColumn = ({ date, blocks, onBlockToggle }) => {
       {blocks.map((block, index) => (
         <div
           key={index}
-          className={`p-2 w-20 border rounded-lg my-1 cursor-pointer ${
-            block.available ? 'bg-green-500 text-white' : 'bg-white'
-          }`}
-          onClick={() => onBlockToggle && onBlockToggle(index)}
+          className={`p-2 w-20 border rounded-lg my-1 cursor-pointer 
+            ${block.available ? 'bg-green-500 text-white' : 'bg-white'}
+            ${!block.selectable ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={() => block.selectable && onBlockToggle && onBlockToggle(index)}
         >
           <div className="text-center">{block.start}</div>
         </div>
