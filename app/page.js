@@ -2,12 +2,12 @@
 import Header from "./components/Header";
 import { useUserAuth } from "./_utils/auth-context";
 import { useState } from "react";
-import HomeScreen from "./_views/HomeScreen";
 import Sidebar from "./components/sidebar";
 import LoginScreen from "./_views/LoginScreen";
 import NewMeetingScreen from "./_views/NewMeetingScreen";
 import RequestsScreen from "./_views/RequestsScreen";
 import ProfileScreen from "./_views/PrifileScreen";
+import HomeScreen from "./_views/HomeScreen";
 
 export default function Home() {
   const { user } = useUserAuth();

@@ -21,22 +21,22 @@ export const SaveMeetingSchedule = async (schedule) => {
     }
   };
 
-  // export async function FetchMeetings() {
-  //   try {
-  //     const meetingsSnapshot = await getDocs(collection(db, 'meetings'));
-  //     return meetingsSnapshot.docs.map(doc => ({
-  //       id: doc.id,
-  //       title: doc.data().title || 'Untitled Meeting',
-  //       creatorEmail: doc.data().creatorEmail || 'Unknown',
-  //       participants: doc.data().participants || [],
-  //       days: doc.data().days || [],
-  //       status: doc.data().status || 'pending'
-  //     }));
-  //   } catch (error) {
-  //     console.error("Error fetching meetings:", error);
-  //     throw error;
-  //   }
-  // }
+  export async function FetchMeetings() {
+    try {
+      const meetingsSnapshot = await getDocs(collection(db, 'meetings'));
+      return meetingsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        title: doc.data().title || 'Untitled Meeting',
+        creatorEmail: doc.data().creatorEmail || 'Unknown',
+        participants: doc.data().participants || [],
+        days: doc.data().days || [],
+        status: doc.data().status || 'pending'
+      }));
+    } catch (error) {
+      console.error("Error fetching meetings:", error);
+      throw error;
+    }
+  }
   export async function FetchRequests(userEmail) {
     try {
       const meetingsSnapshot = await getDocs(collection(db, 'meetings'));
@@ -84,6 +84,33 @@ export const SaveMeetingSchedule = async (schedule) => {
       await deleteDoc(doc(db, 'meetings', id));
     } catch (error) {
       console.error("Error deleting meeting:", error);
+      throw error;
+    }
+  }
+
+  export async function RemoveParticipant(meetingId, email) {
+    try {
+      const meetingRef = await getDocs('meetings').doc(meetingId);
+      const meetingDoc = await meetingRef.get();
+      if (meetingDoc.exists) {
+        const data = meetingDoc.data();
+        const participants = data?.participants || [];
+        const participantAvailability = data?.participantAvailability || {};
+  
+        // Remove the participant from the participants array
+        const updatedParticipants = participants.filter((participant) => participant.email !== email);
+  
+        // Remove the participant's availability
+        const { [email]: _, ...updatedParticipantAvailability } = participantAvailability;
+  
+        // Update the meeting document with the new participants and participantAvailability
+        await meetingRef.update({ 
+          participants: updatedParticipants,
+          participantAvailability: updatedParticipantAvailability
+        });
+      }
+    } catch (error) {
+      console.error("Error removing participant from meeting:", error);
       throw error;
     }
   }
