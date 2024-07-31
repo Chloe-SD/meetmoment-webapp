@@ -13,8 +13,8 @@ const NewMeetingScreen = () => {
   const { user } = useUserAuth();
   const [title, setTitle] = useState<string>('');
   const [participantList, setParticipantList] = useState<Participant[]>([]);
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date| null>(null);
+  const [endDate, setEndDate] = useState<Date| null>(null);
   const [meeting, setMeeting] = useState<Meeting | null>(null);
 
   const addParticipant = (email: string) => {
@@ -109,7 +109,13 @@ const NewMeetingScreen = () => {
 
 
   function validateSelectedTime(): boolean {
-    return startDate <= endDate;
+    if (!startDate || !endDate) return false;
+    // Calculate the difference in time
+    const differenceInTime = endDate.getTime() - startDate.getTime();
+    // Convert time difference to days
+    const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+    // Check if endDate is after startDate and within the specified range
+    return differenceInDays > 0 && differenceInDays <= 10;
   }
 
   function validateParticipantListNotEmpty(): boolean {
@@ -124,7 +130,7 @@ const NewMeetingScreen = () => {
 
   return (
     <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 
-    bg-blue-500 h-svh">
+    bg-blue-500 h-svh overflow-auto">
       <h2 className="text-2xl font-bold text-purple-50 mb-4 self-center">New Meeting</h2>
       
       <MeetingTitleInput title={title} setTitle={setTitle} />
@@ -140,15 +146,15 @@ const NewMeetingScreen = () => {
             endDate={endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}/>
-      
+      <p className='text-purple-50 self-center mt-2'>Meetings are limited to a 10 day range.</p>
       <button
-        className={`rounded-lg px-5 py-1 my-4 
+        className={`flex rounded-lg px-10 py-1 my-4 self-center mx-auto
         ${!validateSelectedTime() ? 'bg-gray-500 cursor-not-allowed' : 
         'bg-gradient-to-br from-sky-800 to-green-400 hover:bg-gradient-to-bl'} 
         text-purple-50 border-2 border-purple-50`}
         disabled={!validateSelectedTime()}
         onClick={selectTime}>
-          Select Time
+          {meeting? (<p>Adjust Days</p>):(<p>Build Schedule</p>)}
       </button>
       <div>
         {meeting && (

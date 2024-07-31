@@ -43,7 +43,7 @@ const RequestsScreen = () => {
 
   return !selectedMeeting? (
     <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 
-    bg-blue-500 max-h-svh">
+    bg-blue-500 h-svh overflow-auto">
         <h2 className="text-2xl font-bold mb-4 self-center">{user?.displayName}&apos;s Requests</h2>
         <input
           className="w-2/3 p-2 rounded border-2 border-neutral-800 self-center"

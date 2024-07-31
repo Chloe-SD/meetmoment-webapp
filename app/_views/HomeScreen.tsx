@@ -66,8 +66,8 @@ const HomeScreen = () => {
   };
 
   return !selectedMeeting ? (
-    <div className="container border-2 border-neutral-800 bg-blue-500 rounded-md 
-          flex flex-col h-svh p-4">
+    <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 
+    bg-blue-500 h-svh overflow-auto">
         <h2 className="text-2xl font-bold text-purple-50 mb-4 self-center">
           {user.displayName}&apos;s Meetings</h2>
         {/* <input

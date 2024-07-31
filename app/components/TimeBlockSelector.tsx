@@ -10,7 +10,7 @@ interface TimeBlockSelectorProps {
 
 const TimeBlockSelector: React.FC<TimeBlockSelectorProps> = ({ days, onBlockToggle }) => {
   return (
-    <div className="flex overflow-x-auto space-x-4 my-4 w-full justify-center items-center">
+    <div className="flex overflow-auto space-x-4 my-4 w-full justify-center items-center">
       {days.map((day, dayIndex) => (
         <DayColumn
           key={day.date}
