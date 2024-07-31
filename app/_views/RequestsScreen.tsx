@@ -9,7 +9,6 @@ const RequestsScreen = () => {
   const { user } = useUserAuth();
   const [search, setSearch] = useState('');
   const [code, setCode] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
 
@@ -37,18 +36,6 @@ const RequestsScreen = () => {
     setSelectedMeeting(meeting);
   };
 
-  const renderMeetingItem = (item: Meeting) => (
-    <div
-      className="bg-blue-100 rounded-lg p-4 mb-4 cursor-pointer"
-      onClick={() => handleMeetingClick(item)}
-      key={item.id}
-    >
-      <div>
-        <p className="text-lg font-bold">{item.title}</p>
-        <p className="text-sm text-gray-600">created by {item.creatorEmail}</p>
-      </div>
-    </div>
-  );
 
   const handleCloseMeetingView = () => {
     setSelectedMeeting(null);

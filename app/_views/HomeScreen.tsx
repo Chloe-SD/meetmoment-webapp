@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useUserAuth } from '../_utils/auth-context';
 import { FetchMeetings, DeleteMeeting, RemoveParticipant } from '../_utils/databaseMgr';
 import { Meeting } from '../_utils/typest';
+import ConfirmedMeetingView from './ConfirmedMeetingView';
 
 const HomeScreen = () => {
   const { user } = useUserAuth();
@@ -59,15 +60,16 @@ const HomeScreen = () => {
     setSelectedMeeting(null);
   };
 
-  const handleSelectMeeting = (meeting: Meeting) => () => {
+  const handleSelectMeeting = (meeting: Meeting) => {
+    console.log("selected meeting: {meeting.title}");
     setSelectedMeeting(meeting);
   };
 
-  return  (
+  return !selectedMeeting ? (
     <div className="container border-2 border-neutral-800 bg-blue-500 rounded-md 
-          flex flex-col h-svh">
-        <h2 className="text-2xl font-bold mb-4
-            my-4 self-center">{user.displayName}&apos;s Meetings</h2>
+          flex flex-col h-svh p-4">
+        <h2 className="text-2xl font-bold text-purple-50 mb-4 self-center">
+          {user.displayName}&apos;s Meetings</h2>
         {/* <input
             className="w-full p-2 border border-gray-300 rounded mb-4"
             placeholder="Search"
@@ -94,10 +96,9 @@ const HomeScreen = () => {
             </div>
         )}
     </div>
-  );
-//   ) : (
-//     <ConfirmedMeetingView meeting={selectedMeeting} onClose={handleCloseMeetingView} />
-//   );
+  )  : (
+     <ConfirmedMeetingView meeting={selectedMeeting} onClose={handleCloseMeetingView} />
+   );
 };
 
 export default HomeScreen;

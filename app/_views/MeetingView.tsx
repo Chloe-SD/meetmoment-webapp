@@ -1,7 +1,7 @@
 // src/screens/MeetingView.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Meeting, Day, Participant } from '../_utils/typest';
-import TimeBlockSelector from "../components/TimeBlockSelector";
+import TimeBlockSelector from '../components/TimeBlockSelector';
 import { useUserAuth } from '../_utils/auth-context';
 import { UpdateMeeting } from '../_utils/databaseMgr';
 
@@ -17,32 +17,40 @@ const MeetingView: React.FC<MeetingViewProps> = ({ meeting, onClose }) => {
 
   useEffect(() => {
     if (user) {
-      const userDays = meeting.days;
-
-      const initializedDays = userDays.map(day => ({
+      const initializedDays = meeting.days.map(day => ({
         ...day,
         blocks: day.blocks.map(block => ({
           ...block,
-          selectable: meeting.days.find(d => d.date === day.date)?.blocks.find(b => b.start === block.start)?.available || false,
-          available: false // start with all blocks unselected
+          selectable: block.available, // This should be true for blocks the creator made available
+          available: false // Start with all blocks unselected for the current user
         }))
       }));
-
+  
       setLocalDays(initializedDays);
     }
     setIsLoading(false);
   }, [user, meeting]);
 
-  const handleBlockToggle = (dayIndex: number, blockIndex: number) => {
+  const handleBlockToggle = useCallback((dayIndex: number, blockIndex: number) => {
+    console.log('Toggle called for day', dayIndex, 'block', blockIndex);
     setLocalDays(prevDays => {
-      const newDays = [...prevDays];
-      const block = newDays[dayIndex].blocks[blockIndex];
-      if (block.selectable) {
-        block.available = !block.available;
-      }
-      return newDays;
+      return prevDays.map((day, dIndex) => {
+        if (dIndex === dayIndex) {
+          return {
+            ...day,
+            blocks: day.blocks.map((block, bIndex) => {
+              if (bIndex === blockIndex && block.selectable) {
+                console.log('Toggling block from', block.available, 'to', !block.available);
+                return { ...block, available: !block.available };
+              }
+              return block;
+            })
+          };
+        }
+        return day;
+      });
     });
-  };
+  }, []);
 
   const handleSubmit = async () => {
     if (!user) {
@@ -80,12 +88,22 @@ const MeetingView: React.FC<MeetingViewProps> = ({ meeting, onClose }) => {
 
   return (
     <div className="border-2 border-neutral-800 bg-blue-500 rounded-md flex flex-col h-svh">
-        <button onClick={onClose} className='self-end mx-5'>Back to My Requests</button>
+        <button onClick={onClose} 
+          className='bg-gradient-to-br from-sky-800 to-green-400
+          hover:bg-gradient-to-bl rounded-lg px-5 py-1 my-4
+          text-purple-50 border-2 border-purple-50
+          shadow-sm shadow-purple-200 self-end mx-5'>Back to My Requests</button>
         <h2 className="text-2xl font-bold mb-4 self-center">{meeting.title} - Meeting Request</h2>
-        <TimeBlockSelector days={localDays} onBlockToggle={handleBlockToggle} />
+        <TimeBlockSelector 
+        key={JSON.stringify(localDays)} 
+        days={localDays} 
+        onBlockToggle={handleBlockToggle} />
         <div className="mt-4">
             <button 
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2"
+            className='bg-gradient-to-br from-sky-800 to-green-400
+            hover:bg-gradient-to-bl rounded-lg px-5 py-1 py-2 my-4
+            text-purple-50 border-2 border-purple-50
+            shadow-sm shadow-purple-200'
             onClick={handleSubmit}
             >
             Submit Availability

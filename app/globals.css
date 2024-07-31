@@ -52,7 +52,7 @@ body {
     bg-purple-50
     p-2
   }
-  button {
+  /* button {
     @apply
     bg-gradient-to-br from-sky-800 to-green-400
     hover:bg-gradient-to-bl
@@ -65,7 +65,7 @@ body {
     border-purple-50
     shadow-sm
     shadow-purple-200
-  }
+  } */
   
 
 }
