@@ -46,9 +46,18 @@ const NewMeetingScreen = () => {
 
   const saveMeetingToDB = async () => {
     if (!meeting || !user) return;
-
+    
+    const updatedMeeting: Meeting = {
+      id: meeting.id,
+      creatorEmail: meeting.creatorEmail,
+      participants: [{ email: meeting.creatorEmail, status: 'confirmed', participantAvailability: meeting.days }, ...participantList],
+      days: meeting.days,
+      title: meeting.title,
+      status: 'pending',
+    };
+  
     try {
-      await SaveMeetingToDatabase(meeting);
+      await SaveMeetingToDatabase(updatedMeeting);
       console.log('Meeting saved successfully!');
     } catch (error) {
       console.error('Error saving meeting:', error);
