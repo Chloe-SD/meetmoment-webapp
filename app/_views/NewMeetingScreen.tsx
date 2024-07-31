@@ -9,13 +9,18 @@ import { SaveMeetingToDatabase } from '../_utils/databaseMgr';
 import ParticipantInput from '../components/ParticipantInput';
 import ParticipantList from '../components/ParticipantList';
 
-const NewMeetingScreen = () => {
+interface NewMeetingScreenProps {
+  setCurrentView: (view: string) => void;
+}
+
+const NewMeetingScreen: React.FC<NewMeetingScreenProps> = ({ setCurrentView }) => {
   const { user } = useUserAuth();
   const [title, setTitle] = useState<string>('');
   const [participantList, setParticipantList] = useState<Participant[]>([]);
   const [startDate, setStartDate] = useState<Date| null>(null);
   const [endDate, setEndDate] = useState<Date| null>(null);
   const [meeting, setMeeting] = useState<Meeting | null>(null);
+
 
   const addParticipant = (email: string) => {
     if (email === user?.email) {return;}
@@ -58,9 +63,10 @@ const NewMeetingScreen = () => {
   
     try {
       await SaveMeetingToDatabase(updatedMeeting);
-      console.log('Meeting saved successfully!');
+      alert('Meeting saved successfully!');
+      setCurrentView('home'); // Redirect to the home tab
     } catch (error) {
-      console.error('Error saving meeting:', error);
+      alert('Error saving meeting: ' + error);
     }
   };
 

@@ -97,7 +97,7 @@ const HomeScreen = () => {
         )}
     </div>
   )  : (
-     <ConfirmedMeetingView meeting={selectedMeeting} onClose={handleCloseMeetingView} />
+     <ConfirmedMeetingView meeting={selectedMeeting} onClose={handleCloseMeetingView} setMeeting={setSelectedMeeting}/>
    );
 };
 

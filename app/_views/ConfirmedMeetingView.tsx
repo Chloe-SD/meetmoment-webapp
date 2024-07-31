@@ -7,9 +7,10 @@ import { useUserAuth } from '../_utils/auth-context';
 interface ConfirmedMeetingViewProps {
   meeting: Meeting;
   onClose: () => void;
+  setMeeting: () => void;
 }
 
-export default function ConfirmedMeetingView({ meeting, onClose }: ConfirmedMeetingViewProps) {
+export default function ConfirmedMeetingView({ meeting, onClose, setMeeting }: ConfirmedMeetingViewProps) {
     const { user } = useUserAuth();
     const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
     const allResponded = meeting.participants?.every(p => p.status === 'confirmed') ?? false;
@@ -23,6 +24,14 @@ export default function ConfirmedMeetingView({ meeting, onClose }: ConfirmedMeet
     const closeParticipantModal = () => {
         setSelectedParticipant(null);
     };
+
+    const handleDeleteClicked = () => {
+        if (meeting.creatorEmail == user.email){
+            handleDeleteMeeting();
+        } else {
+            handleLeaveMeeting();
+        }
+    }
 
     // CREATOR of meeting will be able to delete meeting OR remove ANY participant
     const handleDeleteMeeting = async () => {
@@ -76,20 +85,35 @@ export default function ConfirmedMeetingView({ meeting, onClose }: ConfirmedMeet
             <TimeBlockSelector days={commonAvailability} onBlockToggle={() => {}} />
         </div>
 
-        <div>
-            <h3 className="text-xl font-semibold mb-2 text-purple-50">Participants:</h3>
-            <div className="space-y-2">
-            {meeting.participants?.map((participant) => (
-                <button
-                key={participant.email}
-                onClick={() => handleParticipantPress(participant)}
-                className="w-full text-left px-4 py-2 bg-sky-800 hover:bg-sky-700 text-purple-50 rounded-md"
-                >
-                {participant.email}: {participant.status}
+        <div className='flex justify-between w-4/5 self-center'>
+            <div className='w-3/4'>
+                <h3 className="text-xl font-semibold mb-2 text-purple-50">Participants:</h3>
+                <div className="space-y-2">
+                {meeting.participants?.map((participant) => (
+                    <button
+                    key={participant.email}
+                    onClick={() => handleParticipantPress(participant)}
+                    className="w-full text-left px-4 py-2 bg-sky-800 hover:bg-sky-700 text-purple-50 rounded-md"
+                    >
+                        <div className='flex flex-col'>
+                            <p className='font-semibold text-lg'>{participant.email}</p> 
+                            <p>{participant.status}</p>
+                        </div>
+                    </button>
+                ))}
+                </div>
+            </div>
+            <div className='flex justify-center items-end'>
+                <button className='bg-red-400
+                hover:bg-red-500 rounded-lg px-5 py-1 mb-4
+                text-purple-50 border-2 border-purple-50
+                shadow-sm shadow-purple-200'
+                onClick={handleDeleteClicked}>
+                    {meeting.creatorEmail == user.email? (<p>Delete Meeting</p>):(<p>Leave Meeting</p>)}
                 </button>
-            ))}
             </div>
         </div>
+        
 
         {selectedParticipant && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">

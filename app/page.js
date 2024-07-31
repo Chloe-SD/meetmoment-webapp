@@ -18,7 +18,7 @@ export default function Home() {
       case 'home':
         return <HomeScreen/>
         case 'newMeeting':
-          return <NewMeetingScreen />;
+          return <NewMeetingScreen setCurrentView={setCurrentView} />;
         case 'requests':
           return <RequestsScreen />;
         case 'profile':
