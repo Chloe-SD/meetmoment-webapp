@@ -11,6 +11,11 @@ const MeetingTitleInput: React.FC<MeetingTitleInputProps> = ({ title, setTitle }
     return string !== '';
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value.replace(/[^a-zA-Z0-9 _!?/&-]/g, '');
+    setTitle(newValue);
+  };
+
   return (
     <div className='flex flex-col self-center space-x-4 w-3/4'>
       <div>
@@ -25,7 +30,7 @@ const MeetingTitleInput: React.FC<MeetingTitleInputProps> = ({ title, setTitle }
         type="text"
         placeholder="Meeting Title"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={handleChange}
         maxLength={50}
       />
     </div>

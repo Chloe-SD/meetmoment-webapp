@@ -64,43 +64,41 @@ const NewMeetingScreen = () => {
     }
   };
 
-  const generateTimeBlocks = (date: string): TimeBlock[] => {
+  const generateTimeBlocks = (): TimeBlock[] => {
     let blocks: TimeBlock[] = [];
-    let current = new Date(`${date}T07:00:00`); // Start at 7 AM
-    const endTime = new Date(`${date}T20:00:00`); // End at 8 PM
-
-    while (current < endTime) {
-      const start = current.toTimeString().slice(0, 5);
-      current.setHours(current.getHours() + 1);
-      const end = current.toTimeString().slice(0, 5);
-
+    const startHour = 7;
+    const endHour = 20; // Up to but not including 20:00
+  
+    for (let hour = startHour; hour < endHour; hour++) {
+      const start = `${hour.toString().padStart(2, '0')}:00`;
+      const end = `${(hour + 1).toString().padStart(2, '0')}:00`;
+  
       blocks.push({
         start,
         end,
         available: false,
-        selectable: true, // All blocks are selectable for the creator
+        selectable: true,
       });
     }
-
+  
     return blocks;
   };
 
   const generateDays = (start: Date, end: Date): Day[] => {
     let days: Day[] = [];
-    let current = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-    let endDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-
-    while (current <= endDate) {
-      const dateStr = current.toISOString().split('T')[0];
+    let current = new Date(start);
+  
+    while (current <= end) {
+      const dateStr = current.toDateString(); // YYYY-MM-DD format
       days.push({
         date: dateStr,
-        blocks: generateTimeBlocks(dateStr),
+        blocks: generateTimeBlocks(),
       });
       current.setDate(current.getDate() + 1);
     }
-
     return days;
   };
+
 
   const handleBlockToggle = (dayIndex: number, blockIndex: number) => {
     if (!meeting) return;

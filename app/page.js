@@ -36,7 +36,7 @@ export default function Home() {
           <LoginScreen className="ml-auto mr-auto mt-8 h-auto"/>
         ) : (
           <div>
-            <Sidebar setCurrentView={setCurrentView} />
+            <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
             <div className="ml-48 p-4 flex-1">
               {renderCurrentView()}
               
