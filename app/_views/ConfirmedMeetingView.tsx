@@ -31,6 +31,7 @@ export default function ConfirmedMeetingView({ meeting, onClose, setMeeting }: C
         } else {
             handleLeaveMeeting();
         }
+        setMeeting();
     }
 
     // CREATOR of meeting will be able to delete meeting OR remove ANY participant

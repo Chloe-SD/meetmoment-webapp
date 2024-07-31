@@ -55,6 +55,10 @@ const HomeScreen = () => {
     }
   };
 
+  const handleSetDelete = () => {
+    setSelectedMeeting(null);
+    fetchMeetings();
+  }
 
   const handleCloseMeetingView = () => {
     setSelectedMeeting(null);
@@ -97,7 +101,7 @@ const HomeScreen = () => {
         )}
     </div>
   )  : (
-     <ConfirmedMeetingView meeting={selectedMeeting} onClose={handleCloseMeetingView} setMeeting={setSelectedMeeting}/>
+     <ConfirmedMeetingView meeting={selectedMeeting} onClose={handleCloseMeetingView} setMeeting={handleSetDelete}/>
    );
 };
 
