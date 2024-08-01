@@ -180,7 +180,6 @@ function getCommonAvailability(meeting: Meeting): Day[] {
           pa => pa[dayIndex]?.blocks[blockIndex]?.available
         ),
         selectable: block.available,
-        
       })),
     }));
   }

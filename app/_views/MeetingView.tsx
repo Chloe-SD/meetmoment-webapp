@@ -4,6 +4,7 @@ import { Meeting, Day, Participant } from '../_utils/typest';
 import TimeBlockSelector from '../components/TimeBlockSelector';
 import { useUserAuth } from '../_utils/auth-context';
 import { UpdateMeeting } from '../_utils/databaseMgr';
+import { RemoveParticipant } from '../_utils/databaseMgr';
 
 interface MeetingViewProps {
   meeting: Meeting;
@@ -78,6 +79,19 @@ const MeetingView: React.FC<MeetingViewProps> = ({ meeting, onClose }) => {
     }
   };
 
+  const handleLeaveMeeting = async () => {
+    //console.log('Meeting ID:', meeting.id);
+    //console.log('User email:', user.email);
+    if (window.confirm('Are you sure you want to leave this meeting?')) {
+    try {
+        await RemoveParticipant(meeting.id, user.email);
+        onClose();
+    } catch (error) {
+        console.error('Error leaving meeting:', error);
+    }
+    }
+};
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -95,11 +109,13 @@ const MeetingView: React.FC<MeetingViewProps> = ({ meeting, onClose }) => {
           text-purple-50 border-2 border-purple-50
           shadow-sm shadow-purple-200 self-end mx-5'>Back to My Requests</button>
         <h2 className="text-2xl font-bold mb-4 self-center">{meeting.title} - Meeting Request</h2>
-        <TimeBlockSelector 
-        key={JSON.stringify(localDays)} 
-        days={localDays} 
-        onBlockToggle={handleBlockToggle} />
-        <div className="mt-4">
+        <div>
+          <TimeBlockSelector 
+          key={JSON.stringify(localDays)} 
+          days={localDays} 
+          onBlockToggle={handleBlockToggle} />
+        </div>
+        <div className="flex mt-4 justify-center self-center space-x-8 w-1/2">
             <button 
             className='bg-gradient-to-br from-sky-800 to-green-400
             hover:bg-gradient-to-bl rounded-lg px-5 py-1 py-2 my-4
@@ -109,6 +125,13 @@ const MeetingView: React.FC<MeetingViewProps> = ({ meeting, onClose }) => {
             >
             Submit Availability
             </button>
+            <button className='bg-red-400
+                hover:bg-red-500 rounded-lg px-5 py-1 py-2 my-4
+                text-purple-50 border-2 border-purple-50
+                shadow-sm shadow-purple-200'
+                onClick={handleLeaveMeeting}>
+                     Leave Meeting
+                </button>
             
         </div>
         </div>
