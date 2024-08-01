@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Meeting, Day, Participant } from '../_utils/typest';
+import { Meeting, Day, Participant, TimeBlock } from '../_utils/typest';
 import TimeBlockSelector from '../components/TimeBlockSelector';
 import { DeleteMeeting, RemoveParticipant } from '../_utils/databaseMgr';
 import { useUserAuth } from '../_utils/auth-context';
@@ -160,23 +160,27 @@ export default function ConfirmedMeetingView({ meeting, onClose, setMeeting }: C
 }
 
 function getCommonAvailability(meeting: Meeting): Day[] {
-  const confirmedParticipants = meeting.participants.filter(p => p.status === 'confirmed');
-  
-  if (confirmedParticipants.length === 0) return [];
-
-  const participantAvailabilities = confirmedParticipants
-    .map(p => p.participantAvailability)
-    .filter(pa => pa !== undefined && pa.length > 0);
-
-  if (participantAvailabilities.length === 0) return [];
-
-  return participantAvailabilities[0].map((day, dayIndex) => ({
-    date: day.date,
-    blocks: day.blocks.map((block, blockIndex) => ({
-      ...block,
-      available: participantAvailabilities.every(
-        pa => pa[dayIndex]?.blocks[blockIndex]?.available
-      ),
-    })),
-  }));
-}
+    // Copy the participant list - filtering out anyone who has NOT confirmed their availability
+    const confirmedParticipants = meeting.participants.filter(p => p.status === 'confirmed');
+    // return nothing is no one is confirmed
+    if (confirmedParticipants.length === 0) return [];
+    // get the availabilities from each CONFIRMED participant
+    const participantAvailabilities = confirmedParticipants
+      .map(p => p.participantAvailability)
+      .filter(pa => pa !== undefined && pa.length > 0);
+    // again return none if no one has availabilities defined
+    if (participantAvailabilities.length === 0) return [];
+    // Create a brand new Days array. // copying the blocks from the original
+    return participantAvailabilities[0].map((day, dayIndex) => ({
+      date: day.date,
+      blocks: day.blocks.map((block, blockIndex) => ({
+        ...block, // unpack eac block object and ONLY set it TRUE if EVER PARTICIPANT
+        //also had this block selected as TRUE (available)
+        available: participantAvailabilities.every(
+          pa => pa[dayIndex]?.blocks[blockIndex]?.available
+        ),
+        selectable: block.available,
+        
+      })),
+    }));
+  }
