@@ -37,47 +37,6 @@ export const SaveMeetingSchedule = async (schedule) => {
       throw error;
     }
   }
-  export async function FetchRequests(userEmail) {
-    try {
-      const meetingsSnapshot = await getDocs(collection(db, 'meetings'));
-      const requests = meetingsSnapshot.docs
-        .map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }))
-        .filter(meeting => 
-          meeting.participants.some(participant => 
-            participant.email === userEmail && participant.status === 'pending'
-          )
-        );
-      
-      return requests;
-    } catch (error) {
-      console.error("Error fetching requests:", error);
-      throw error;
-    }
-  }
-  
-  export async function FetchConfirmed(userEmail) {
-    try {
-      const meetingsSnapshot = await getDocs(collection(db, 'meetings'));
-      const confirmed = meetingsSnapshot.docs
-        .map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }))
-        .filter(meeting => 
-          meeting.participants.some(participant => 
-            participant.email === userEmail && participant.status === 'confirmed'
-          )
-        );
-      
-      return confirmed;
-    } catch (error) {
-      console.error("Error fetching confirmed meetings:", error);
-      throw error;
-    }
-  }
 
   export async function DeleteMeeting(id) {
     try {
@@ -90,24 +49,18 @@ export const SaveMeetingSchedule = async (schedule) => {
 
   export async function RemoveParticipant(meetingId, email) {
     try {
-      const meetingRef = await getDocs('meetings').doc(meetingId);
-      const meetingDoc = await meetingRef.get();
-      if (meetingDoc.exists) {
+      const meetingRef = doc(db, 'meetings', meetingId);
+      const meetingDoc = await getDoc(meetingRef);
+      if (meetingDoc.exists()) {
         const data = meetingDoc.data();
         const participants = data?.participants || [];
-        const participantAvailability = data?.participantAvailability || {};
-  
-        // Remove the participant from the participants array
         const updatedParticipants = participants.filter((participant) => participant.email !== email);
-  
-        // Remove the participant's availability
-        const { [email]: _, ...updatedParticipantAvailability } = participantAvailability;
-  
-        // Update the meeting document with the new participants and participantAvailability
-        await meetingRef.update({ 
-          participants: updatedParticipants,
-          participantAvailability: updatedParticipantAvailability
+        
+        await updateDoc(meetingRef, { 
+          participants: updatedParticipants
         });
+      } else {
+        throw new Error('Meeting not found');
       }
     } catch (error) {
       console.error("Error removing participant from meeting:", error);

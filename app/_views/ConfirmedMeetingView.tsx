@@ -46,6 +46,12 @@ export default function ConfirmedMeetingView({ meeting, onClose, setMeeting }: C
         }
     };
     const handleRemoveParticipant = async (email: string) => {
+        if (meeting.participants.length <=2){
+            if (window.confirm('A meeting must have at least two participants, would you like to delete this meeting instead?')){
+                handleDeleteMeeting();
+                return;
+            }
+        }
         if (window.confirm('Are you sure you want to remove this participant?')) {
         try {
             await RemoveParticipant(meeting.id, email);
@@ -57,6 +63,8 @@ export default function ConfirmedMeetingView({ meeting, onClose, setMeeting }: C
     };
     // Additionally, a participant may remove THEMSELVES from the meeting
     const handleLeaveMeeting = async () => {
+        //console.log('Meeting ID:', meeting.id);
+        //console.log('User email:', user.email);
         if (window.confirm('Are you sure you want to leave this meeting?')) {
         try {
             await RemoveParticipant(meeting.id, user.email);
@@ -91,16 +99,30 @@ export default function ConfirmedMeetingView({ meeting, onClose, setMeeting }: C
                 <h3 className="text-xl font-semibold mb-2 text-purple-50">Participants:</h3>
                 <div className="space-y-2">
                 {meeting.participants?.map((participant) => (
-                    <button
-                    key={participant.email}
-                    onClick={() => handleParticipantPress(participant)}
-                    className="w-full text-left px-4 py-2 bg-sky-800 hover:bg-sky-700 text-purple-50 rounded-md"
-                    >
-                        <div className='flex flex-col'>
-                            <p className='font-semibold text-lg'>{participant.email}</p> 
-                            <p>{participant.status}</p>
-                        </div>
-                    </button>
+                    <div className='flex justify-between space-x-2 items-center'>
+                        {meeting.creatorEmail == user.email? (
+                            <div>
+                                <button className='bg-red-400 hover:bg-red-500
+                                    rounded-xl text-purple-50 border-2 border-purple-50
+                                    shadow-sm shadow-purple-200 px-2 py-1'
+                                    onClick={() => handleRemoveParticipant(participant.email)}>
+                                        X
+                                </button>
+                            </div>
+                        ): null}
+                        <button
+                            key={participant.email}
+                            onClick={() => handleParticipantPress(participant)}
+                            className="w-full text-left px-4 py-2 bg-sky-800 hover:bg-sky-700 text-purple-50 rounded-md"
+                            >
+                            <div className='flex flex-col'>
+                                <p className='font-semibold text-lg'>{participant.email}</p> 
+                                <p>{participant.status}</p>
+                            </div>
+                        </button>
+                        
+                    </div>
+                    
                 ))}
                 </div>
             </div>

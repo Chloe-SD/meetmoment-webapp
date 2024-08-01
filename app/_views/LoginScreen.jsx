@@ -1,7 +1,6 @@
 "use client"
 import { useUserAuth } from "../_utils/auth-context";
-
-import meeting1 from "../../public/meeting1.jpg";
+import LoginForm from "../components/LoginForm";
 
 
 const LoginScreen = () => {
@@ -53,12 +52,15 @@ const LoginScreen = () => {
             </div>
 
             <h1 className="font-semibold text-purple-50 text-3xl">Welcome to MeetMoment!</h1>
-            <p className="text-purple-100 text-lg w-2/3 text-center">
+            <p className="text-purple-100 text-lg w-2/3 text-center my-4">
                 MeetMoment is a meeting scheduling app that finds common availability between 
                 multiple people. Perfect for work, school projects, or coffee dates. Log in, 
                 create meetings, add participants, and see common availability at a glance!
             </p>
 
+            {/* TODO: Attempting to implement email/password sign in, cant get usernames to display.
+            This is a *Nice to have*, will come back if theres time
+            <LoginForm/> */}
             <button onClick={handleSignIn}
                 className='bg-gradient-to-br from-sky-800 to-green-400
                 hover:bg-gradient-to-bl rounded-lg px-5 py-1 my-4
