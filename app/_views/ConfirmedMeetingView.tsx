@@ -100,7 +100,7 @@ export default function ConfirmedMeetingView({ meeting, onClose, setMeeting }: C
                 <div className="space-y-2">
                 {meeting.participants?.map((participant) => (
                     <div className='flex justify-between space-x-2 items-center'>
-                        {meeting.creatorEmail == user.email? (
+                        {meeting.creatorEmail == user?.email? (
                             <div>
                                 <button className='bg-red-400 hover:bg-red-500
                                     rounded-xl text-purple-50 border-2 border-purple-50
