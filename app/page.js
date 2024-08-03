@@ -7,8 +7,8 @@ import Sidebar from "./components/sidebar";
 import LoginScreen from "./_views/LoginScreen";
 import NewMeetingScreen from "./_views/NewMeetingScreen";
 import RequestsScreen from "./_views/RequestsScreen";
-import ProfileScreen from "./_views/PrifileScreen";
 import HomeScreen from "./_views/HomeScreen";
+import ProfileScreen from "./_views/ProfileScreen";
 
 export default function Home() {
   const { user } = useUserAuth();
