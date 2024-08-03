@@ -72,7 +72,7 @@ export const AuthContextProvider = ({ children }) => {
       }
     });
     return () => unsubscribe();
-  }, [user]);
+  }, []);
  
   return (
     <AuthContext.Provider value={{ user, gitHubSignIn, firebaseSignOut, emailSignIn, emailSignUp }}>
