@@ -117,7 +117,8 @@ export const SaveMeetingSchedule = async (schedule) => {
       if (userDoc.exists()) {
         return userDoc.data();
       } else {
-        throw new Error('User not found');
+        console.log('User document not found. may be a first time sign in');
+        return null;
       }
     } catch (error) {
       console.error('Error fetching user data:', error);

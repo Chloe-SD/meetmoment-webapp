@@ -82,7 +82,7 @@ const HomeScreen = () => {
         /> */}
 
         {meetings.length === 0 ? (
-            <p>No meetings found.</p>
+            <p className='text-purple-50 text-lg self-center'>No meetings found, Why not make a new one?</p>
         ) : (
             <div className='flex flex-col overflow-y-auto w-full mb-10'>
                 {meetings.map((item) => (

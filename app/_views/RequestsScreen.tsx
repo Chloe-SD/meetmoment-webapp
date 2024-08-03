@@ -44,7 +44,8 @@ const RequestsScreen = () => {
   return !selectedMeeting? (
     <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 
     bg-blue-500 h-svh overflow-auto">
-        <h2 className="text-2xl font-bold mb-4 self-center">{user?.displayName}&apos;s Requests</h2>
+        <h2 className="text-2xl font-bold mb-4 self-center
+        text-purple-50">{user?.displayName}&apos;s Requests</h2>
         <input
           className="w-2/3 p-2 rounded border-2 border-neutral-800 self-center"
           placeholder="Search"
@@ -52,7 +53,7 @@ const RequestsScreen = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
         <div className='flex my-4 w-2/3 self-center items-center justify-end space-x-6'>
-            <p className='font-semibold text-lg'>Find Meeting by Code: </p>
+            {/* <p className='font-semibold text-lg'>Find Meeting by Code: </p>
             <input
             className="p-2 rounded-md border-2 
             border-neutral-800"
@@ -60,7 +61,7 @@ const RequestsScreen = () => {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             type="number"
-            />
+            /> */}
         </div>
         <div className='flex flex-col overflow-y-auto w-full'>
             {meetings.map((item) => (
@@ -77,6 +78,9 @@ const RequestsScreen = () => {
             </div>
             ))}
         </div>
+        {meetings.length == 0? (
+          <p className='text-purple-50 text-lg self-center'>You have no requests</p>
+        ) : null }
     </div>
   )  : (
     <MeetingView meeting={selectedMeeting} onClose={handleCloseMeetingView} />

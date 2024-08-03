@@ -1,15 +1,31 @@
 "use client"
+import { useState } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 import LoginForm from "../components/LoginForm";
+import RegisterForm from "../components/RegisterForm";
 import Image from "next/image";
 
 
 const LoginScreen = () => {
     const { user, gitHubSignIn } = useUserAuth();
+    const [emailLogin, setEmailLogin] = useState(false);
+    const [register, setRegister] = useState(false);
 
     function handleSignIn() {
+        setEmailLogin(false);
+        setRegister(false);
         gitHubSignIn();
     };
+
+    function handleEmailLogin() {
+        setRegister(false);
+        setEmailLogin(true);
+    }
+
+    function handleRegister() {
+        setEmailLogin(false);
+        setRegister(true);
+    }
 
     
 
@@ -59,14 +75,30 @@ const LoginScreen = () => {
                 create meetings, add participants, and see common availability at a glance!
             </p>
 
-            {/* TODO: Attempting to implement email/password sign in, cant get usernames to display.
-            This is a *Nice to have*, will come back if theres time
-            <LoginForm/> */}
-            <button onClick={handleSignIn}
-                className='bg-gradient-to-br from-sky-800 to-green-400
-                hover:bg-gradient-to-bl rounded-lg px-5 py-1 my-4
-                text-purple-50 border-2 border-purple-50
-                shadow-sm shadow-purple-200 w-80'>Login with GitHub</button>
+            
+            <div className="flex items-center space-x-8 mb-4">
+                <div className="flex flex-col">
+                    <button onClick={handleEmailLogin}
+                        className='bg-gradient-to-br from-sky-800 to-green-400
+                        hover:bg-gradient-to-bl rounded-lg px-5 py-1 mb-4
+                        text-purple-50 border-2 border-purple-50
+                        shadow-sm shadow-purple-200 w-80'>Login with Email</button>
+                    <button onClick={handleSignIn}
+                        className='bg-gray-600
+                        hover:bg-gray-700 rounded-lg px-5 py-1 mb-8
+                        text-purple-50 border-2 border-purple-50
+                        shadow-sm shadow-purple-200 w-80'>Login with GitHub</button>
+                    <button onClick={handleRegister}
+                        className='bg-gradient-to-br from-sky-800 to-green-400
+                        hover:bg-gradient-to-bl rounded-lg px-5 py-1 mb-4
+                        text-purple-50 border-2 border-purple-50
+                        shadow-sm shadow-purple-200 w-80'>Register new account</button>
+                </div>
+                {emailLogin? ( <LoginForm/> ): null }
+                {register? ( <RegisterForm/> ) : null }
+            </div>
+            
+            
         </div>
     );
 }

@@ -1,3 +1,4 @@
+// app/components/sidebar.tsx
 import React from 'react';
 import { useUserAuth } from '../_utils/auth-context';
 
