@@ -24,7 +24,7 @@ const ProfileScreen = () => {
 
   return (
     <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 
-    bg-blue-500 h-svh overflow-auto items-center">
+    bg-blue-500 h-full overflow-auto">
     <h2 className="text-2xl font-bold text-purple-50 mb-4 self-center">Profile Screen</h2>
     
     <div className='flex flex-col justify-start mt-10 w-2/3'>

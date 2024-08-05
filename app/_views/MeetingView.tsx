@@ -102,7 +102,7 @@ const MeetingView: React.FC<MeetingViewProps> = ({ meeting, onClose }) => {
 
   return (
     <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 
-    bg-blue-500 h-svh overflow-auto">
+    bg-blue-500 h-full overflow-auto">
         <button onClick={onClose} 
           className='bg-gradient-to-br from-sky-800 to-green-400
           hover:bg-gradient-to-bl rounded-lg px-5 py-1 my-4

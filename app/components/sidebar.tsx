@@ -22,7 +22,7 @@ const Sidebar = ({ currentView, setCurrentView }) => {
     };
 
     return (
-        <div className="flex flex-col w-48 h-auto 
+        <div className="flex flex-col w-48 h-4/5 
         bg-gradient-to-bl from-sky-800 to-sky-300
         text-purple-50 p-4 fixed
         rounded-md border-2 border-neutral-800 mt-5">
@@ -43,7 +43,7 @@ const Sidebar = ({ currentView, setCurrentView }) => {
             
             <button onClick={handleSignOut}
                 className='bg-gradient-to-br from-sky-800 to-green-400
-                hover:bg-gradient-to-bl rounded-lg px-5 py-1 mb-4 mt-60
+                hover:bg-gradient-to-bl rounded-lg px-5 py-1 mb-4 mt-auto
                 text-purple-50 border-2 border-purple-50
                 shadow-sm shadow-purple-200'>Logout</button>
         </div>

@@ -76,7 +76,8 @@ export default function ConfirmedMeetingView({ meeting, onClose, setMeeting }: C
     };
 
     return (
-        <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 bg-blue-500 h-svh overflow-auto">
+        <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 
+        bg-blue-500 h-full overflow-auto">
         <button
             onClick={onClose}
             className="bg-gradient-to-br from-sky-800 to-green-400 hover:bg-gradient-to-bl rounded-lg px-5 py-1 my-4 text-purple-50 border-2 border-purple-50 shadow-sm shadow-purple-200 self-end"

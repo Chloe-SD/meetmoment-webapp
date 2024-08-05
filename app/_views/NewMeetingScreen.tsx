@@ -143,7 +143,7 @@ const NewMeetingScreen: React.FC<NewMeetingScreenProps> = ({ setCurrentView }) =
 
   return (
     <div className="flex flex-col border-2 border-neutral-800 rounded-md p-4 
-    bg-blue-500 h-svh overflow-auto">
+    bg-blue-500 h-full overflow-auto">
       <h2 className="text-2xl font-bold text-purple-50 mb-4 self-center">New Meeting</h2>
       
       <MeetingTitleInput title={title} setTitle={setTitle} />

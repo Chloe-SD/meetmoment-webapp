@@ -31,15 +31,15 @@ export default function Home() {
   };
 
   return (
-    <main>
+    <main className="flex flex-col h-full justify-center">
       <Header/>
-      <div>
+      <div className="flex flex-1 overflow-hidden">
         {!user ? (
           <LoginScreen className="ml-auto mr-auto mt-8 h-auto"/>
         ) : (
-          <div>
+          <div className="flex flex-1">
             <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
-            <div className="ml-48 p-4 flex-1">
+            <div className="ml-48 p-2 flex-1 overflow-auto">
               {renderCurrentView()}
               
             </div>
