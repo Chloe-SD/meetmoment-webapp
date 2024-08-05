@@ -39,7 +39,7 @@ const ProfileScreen = () => {
       </input>
       <button onClick={handleUpdateName}
         className='bg-gradient-to-br from-sky-800 to-green-400
-        hover:bg-gradient-to-bl rounded-lg px-5 py-1 mt-2
+        hover:bg-gradient-to-bl rounded-lg px-5 py-1 mt-2 mb-auto
         text-purple-50 border-2 border-purple-50
         shadow-sm shadow-purple-200 w-60'>
         Update Username

@@ -42,8 +42,6 @@ body {
 @layer base {
   main {
     @apply
-    flex
-    flex-col
     min-h-screen
     w-4/5 
     m-2
@@ -52,22 +50,7 @@ body {
     bg-purple-50
     p-2
   }
-  /* button {
-    @apply
-    bg-gradient-to-br from-sky-800 to-green-400
-    hover:bg-gradient-to-bl
-    rounded-lg
-    px-5
-    py-1
-    my-4
-    text-purple-50
-    border-2
-    border-purple-50
-    shadow-sm
-    shadow-purple-200
-  } */
   
-
 }
 
 

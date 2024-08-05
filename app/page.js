@@ -9,6 +9,7 @@ import NewMeetingScreen from "./_views/NewMeetingScreen";
 import RequestsScreen from "./_views/RequestsScreen";
 import HomeScreen from "./_views/HomeScreen";
 import ProfileScreen from "./_views/ProfileScreen";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const { user } = useUserAuth();
@@ -46,6 +47,7 @@ export default function Home() {
         )}
         
       </div>
+      <Footer/>
     </main>
   );
 }

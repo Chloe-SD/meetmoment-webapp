@@ -26,21 +26,27 @@ export const AuthContextProvider = ({ children }) => {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await CreateUserDocument({
         id: user.uid,
-        email,
-        name,
+        email: email,
+        name: name,
       });
       setUser({
         id: user.uid,
-        email,
-        name,
+        email: email,
+        name: name,
       });
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  const emailSignIn = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const emailSignIn = async (email, password) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error(error.message);
+      alert(error.message);
+      return error.message;
+    }
   };
  
   const firebaseSignOut = () => {
@@ -54,6 +60,7 @@ export const AuthContextProvider = ({ children }) => {
         
         if (!userData) {
           // If user document doesn't exist (first GitHub sign-in or new Email sign in), create one
+          console.log('User document not found, creating new document');
           userData = {
             id: currentUser.uid,
             email: currentUser.email,
@@ -62,6 +69,7 @@ export const AuthContextProvider = ({ children }) => {
           await CreateUserDocument(userData);
         }
         // set user values to values from the stored document
+        console.log('User document found, logging in');
         setUser({
           id: currentUser.uid,
           email: currentUser.email,
