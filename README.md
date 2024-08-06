@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+MeetMoment is a meeting scheduling app that finds common availability between multiple people. 
+Perfect for work, school projects, or coffee dates. Log in, create meetings, add participants, and see common availability at a glance!
 
-## Getting Started
+## VIEWING AS A LIVE DEPLOYMENT
+The live deployment of the webapp can be viewed at the following URL:
+https://meetmoment-webapp.vercel.app/
 
-First, run the development server:
+This is a [Next.js] project
+## VIEWING IN A DEV ENVIRONMENT
+- Clone the repo onto your machine
+- run the command 'npm i' to install dependencies
+- run the command 'npm run dev' to launch the project
+- Open a browser and navigate to 'localhost:3000'
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+!!! ABOUT !!!
+MeetMoment is a cross-patform scheduling application for web and Android. 
+(Android version repo can be found at: https://github.com/Chloe-SD/MeetMoment)
+Both sides of the app share a common database, allowing you to access your meetings
+from either platform. 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The Idea for MeetMoment was to use similar concepts to some existing scheduling apps, 
+while having a more organized approach to tracking and maintaining meetings. 
+Future updates will hopefully include advanced features such as automatically adding events
+to your calendars, and ever auto-selecting your availability based on your calendar openings.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+!!! CITATION AND CREDIT !!!
+The MeetMoment-Webapp was a personal project made by Chloe Nibali, based on the MeetMoment
+Android app designed by Chloe Nibali, Jaeeun Lee, and Donald Jans Uy. Some components and code
+snippets from the Android app were adapted to make this app. Any code not written directly
+by Chloe Nibali was modified and used with the permission of it's original author.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The Photos on the login page of the App are free-use, downloaded from Pexels.com. The links directly
+underleath each photo are a credit the photographer, and will take you directly to the 
+photographers profile on pexels.com.
