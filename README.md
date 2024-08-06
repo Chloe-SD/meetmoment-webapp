@@ -12,7 +12,7 @@ This is a [Next.js] project
 - run the command 'npm run dev' to launch the project
 - Open a browser and navigate to 'localhost:3000'
 
-!!! ABOUT !!!
+##ABOUT
 MeetMoment is a cross-patform scheduling application for web and Android. 
 (Android version repo can be found at: https://github.com/Chloe-SD/MeetMoment)
 Both sides of the app share a common database, allowing you to access your meetings
@@ -23,7 +23,7 @@ while having a more organized approach to tracking and maintaining meetings.
 Future updates will hopefully include advanced features such as automatically adding events
 to your calendars, and ever auto-selecting your availability based on your calendar openings.
 
-!!! CITATION AND CREDIT !!!
+##CITATION AND CREDIT
 The MeetMoment-Webapp was a personal project made by Chloe Nibali, based on the MeetMoment
 Android app designed by Chloe Nibali, Jaeeun Lee, and Donald Jans Uy. Some components and code
 snippets from the Android app were adapted to make this app. Any code not written directly
