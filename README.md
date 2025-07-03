@@ -1,34 +1,85 @@
-MeetMoment is a meeting scheduling app that finds common availability between multiple people. 
-Perfect for work, school projects, or coffee dates. Log in, create meetings, add participants, and see common availability at a glance!
+# MeetMoment - Cross-Platform Scheduling Application
 
-## VIEWING AS A LIVE DEPLOYMENT
-The live deployment of the webapp can be viewed at the following URL:
-https://meetmoment-webapp.vercel.app/
+**Full-stack scheduling solution with complex n-person availability algorithms and real-time synchronization**
 
-This is a [Next.js] project
-## VIEWING IN A DEV ENVIRONMENT
-- Clone the repo onto your machine
-- run the command 'npm i' to install dependencies
-- run the command 'npm run dev' to launch the project
-- Open a browser and navigate to 'localhost:3000'
+🌐 **[Live Demo](https://meetmoment-webapp.vercel.app/)** | 📱 **[Android Version](https://github.com/Chloe-SD/MeetMoment)**
 
-## ABOUT
-MeetMoment is a cross-patform scheduling application for web and Android. 
-(Android version repo can be found at: https://github.com/Chloe-SD/MeetMoment)
-Both sides of the app share a common database, allowing you to access your meetings
-from either platform. 
+![Screenshot 2025-07-03 092005](https://github.com/user-attachments/assets/551a23aa-5c94-4a02-a920-2d806dfa26da)
 
-The Idea for MeetMoment was to use similar concepts to some existing scheduling apps, 
-while having a more organized approach to tracking and maintaining meetings. 
-Future updates will hopefully include advanced features such as automatically adding events
-to your calendars, and ever auto-selecting your availability based on your calendar openings.
+## 🚀 What It Does
 
-## CITATION AND CREDIT
-The MeetMoment-Webapp was a personal project made by Chloe Nibali, based on the MeetMoment
-Android app designed by Chloe Nibali, Jaeeun Lee, and Donald Jans Uy. Some components and code
-snippets from the Android app were adapted to make this app. Any code not written directly
-by Chloe Nibali was modified and used with the permission of it's original author.
+MeetMoment solves the "when can everyone meet?" problem by finding common availability across multiple participants. Whether it's work meetings, group projects, or coffee dates - see everyone's availability at a glance and find the perfect time slot.
 
-The Photos on the login page of the App are free-use, downloaded from Pexels.com. The links directly
-underleath each photo are a credit the photographer, and will take you directly to the 
-photographers profile on pexels.com.
+### Key Features
+- **Smart Availability Matching** - Complex algorithms find optimal meeting times for n-person groups
+- **Real-Time Synchronization** - Live updates across all participants using Firebase
+- **Cross-Platform Access** - Shared database with Android app for seamless platform switching
+- **Intuitive Interface** - Clean, responsive design for effortless scheduling
+- **Secure Authentication** - Firebase Auth with personalized user accounts
+
+## 🛠️ Technical Architecture
+
+**Framework:** Next.js 14 with App Router  
+**Database:** Firebase Firestore with real-time listeners  
+**Authentication:** Firebase Auth (email/password)  
+**Styling:** TailwindCSS with responsive design  
+**Deployment:** Vercel with automatic deployments  
+
+### Core Algorithm
+The availability matching engine processes overlapping time slots across multiple participants:
+- Converts user availability into standardized time blocks
+- Calculates intersection of all participant schedules  
+- Returns ranked suggestions based on optimal overlap
+- Handles timezone differences and conflict resolution
+
+## 📱 Cross-Platform Ecosystem
+
+This web application shares a unified backend with the **[MeetMoment Android app](https://github.com/Chloe-SD/MeetMoment)**, enabling users to:
+- Create meetings on web, join from mobile
+- Access the same meetings across platforms
+- Real-time sync between web and Android interfaces
+- Consistent user experience regardless of device
+
+## 🚀 Quick Start
+
+### Live Demo
+Visit **[meetmoment-webapp.vercel.app](https://meetmoment-webapp.vercel.app/)** to try it immediately - no setup required!
+
+### Local Development
+```bash
+# Clone and install
+git clone https://github.com/Chloe-SD/meetmoment-webapp.git
+cd meetmoment-webapp
+npm install
+
+# Run development server
+npm run dev
+# Open http://localhost:3000
+
+# Build for production
+npm run build
+npm start
+```
+
+## 🎯 Development Highlights
+
+**Complex State Management** - Real-time synchronization of meeting data across multiple users  
+**Algorithm Design** - Custom availability matching logic for n-person scheduling  
+**Cross-Platform Architecture** - Shared Firebase backend serving both web and mobile clients  
+**Responsive Design** - Mobile-first approach with seamless desktop experience  
+**Performance Optimization** - Next.js optimization features for fast loading and SEO  
+
+## 🔗 Project Context
+
+**Personal Project** - Built as companion to group-developed Android application  
+**Technology Expansion** - Demonstrates ability to adapt concepts across platforms  
+**Full-Stack Implementation** - End-to-end development from database design to deployment  
+
+## 📸 Screenshots
+![mnew](https://github.com/user-attachments/assets/0e2d34fd-e3f4-4ba9-a151-f5702bebeec7)
+![mdone](https://github.com/user-attachments/assets/2acbd802-6037-4745-be46-5323efe7b340)
+
+
+---
+
+**Tech Stack:** Next.js, Firebase, TailwindCSS, Vercel
